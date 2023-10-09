@@ -18,7 +18,7 @@ public class InMemoryPlayerDAO implements PlayerDAO {
     @Override
     public Optional<Player> findByLogin(String login) {
         Player player = null;
-        List<Player> list = (List<Player>) players.values();
+        List<Player> list = new ArrayList<>(players.values());
 
         for (Player pl : list) {
             if (pl.getLogin().equals(login)) {
@@ -32,7 +32,7 @@ public class InMemoryPlayerDAO implements PlayerDAO {
 
     @Override
     public List<Player> findAll() {
-        return (List<Player>) players.values();
+        return new ArrayList<>(players.values());
     }
 
     @Override

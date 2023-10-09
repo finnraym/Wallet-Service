@@ -16,7 +16,7 @@ public class InMemoryTransactionDAO implements TransactionDAO {
 
     @Override
     public List<Transaction> findAll() {
-        return (List<Transaction>) transactions.values();
+        return new ArrayList<>(transactions.values());
     }
 
     @Override

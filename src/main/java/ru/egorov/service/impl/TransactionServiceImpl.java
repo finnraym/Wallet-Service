@@ -36,7 +36,11 @@ public class TransactionServiceImpl implements TransactionService {
             throw new TransactionOperationException("Недостаточно средств.");
         }
 
+        transaction.setAmount(amount);
+        transaction.setBalanceBefore(playerBalance);
+        transaction.setTransactionIdentifier(transactionIdentifier);
         BigDecimal result = playerBalance.subtract(amount);
+        transaction.setBalanceAfter(result);
 
         transactionDAO.save(transaction);
         return playerService.updateBalance(playerId, result);
@@ -48,7 +52,11 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = openNewTransaction("credit", playerId);
         BigDecimal playerBalance = playerService.getPlayerBalance(playerId);
 
+        transaction.setAmount(amount);
+        transaction.setBalanceBefore(playerBalance);
+        transaction.setTransactionIdentifier(transactionIdentifier);
         BigDecimal result = playerBalance.add(amount);
+        transaction.setBalanceAfter(result);
 
         transactionDAO.save(transaction);
         return playerService.updateBalance(playerId, result);

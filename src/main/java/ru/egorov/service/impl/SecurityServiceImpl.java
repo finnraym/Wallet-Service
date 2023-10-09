@@ -1,7 +1,8 @@
 package ru.egorov.service.impl;
 
 import ru.egorov.dao.PlayerDAO;
-import ru.egorov.exception.PlayerAlreadyExistsException;
+import ru.egorov.exception.AuthorizeException;
+import ru.egorov.exception.RegisterException;
 import ru.egorov.model.Player;
 import ru.egorov.service.SecurityService;
 
@@ -20,7 +21,7 @@ public class SecurityServiceImpl implements SecurityService {
     public Player register(String login, String password) {
         Optional<Player> player = playerDAO.findByLogin(login);
         if (player.isPresent()) {
-            throw new PlayerAlreadyExistsException("Игрок с таким логином уже существует.");
+            throw new RegisterException("Игрок с таким логином уже существует.");
         }
 
         Player newPlayer = new Player();
@@ -33,6 +34,16 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public Player authorization(String login, String password) {
-        return null;
+        Optional<Player> optionalPlayer = playerDAO.findByLogin(login);
+        if (optionalPlayer.isEmpty()) {
+            throw new AuthorizeException("Игрока с таким логином нет в базе.");
+        }
+
+        Player player = optionalPlayer.get();
+        if (!player.getPassword().equals(password)) {
+            throw new AuthorizeException("Неверный пароль.");
+        }
+
+        return player;
     }
 }
