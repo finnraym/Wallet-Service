@@ -1,5 +1,7 @@
 package ru.egorov.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.egorov.exception.NotValidArgumentException;
 import ru.egorov.model.Player;
 import ru.egorov.model.Transaction;
@@ -15,7 +17,7 @@ import java.util.UUID;
  * The type Main controller.
  */
 public class MainController {
-
+    private static final Logger log = LoggerFactory.getLogger(MainController.class);
     private final TransactionService transactionService;
     private final SecurityService securityService;
     private final PlayerService playerService;
@@ -41,6 +43,7 @@ public class MainController {
      * @return the player
      */
     public Player register(String login, String password) {
+        log.info("The player trying to register with login " + login + " and password " + password);
         if (login == null || password == null || login.isEmpty() || login.isBlank() || password.isEmpty() || password.isBlank()) {
             throw new NotValidArgumentException("The password or login cannot be empty or consist of only spaces");
         }
@@ -60,6 +63,7 @@ public class MainController {
      * @return the player
      */
     public Player authorize(String login, String password) {
+        log.info("The player trying to log in with login " + login + " and password " + password);
         return securityService.authorization(login, password);
     }
 
@@ -70,6 +74,7 @@ public class MainController {
      * @return the big decimal
      */
     public BigDecimal showBalance(Player player) {
+        log.info("The player with login " + player.getLogin() + " showing his balance.");
         return playerService.getPlayerBalance(player.getId());
     }
 
@@ -80,6 +85,7 @@ public class MainController {
      * @return the list
      */
     public List<Transaction> showTransactionsHistory(Player player) {
+        log.info("The player with login " + player.getLogin() + " showing his transaction history.");
         return transactionService.getPlayerHistory(player.getId());
     }
 
@@ -92,6 +98,7 @@ public class MainController {
      * @return the boolean
      */
     public boolean debitTransaction(BigDecimal amount, UUID transactionIdentifier, Player player) {
+        log.info("The player with login " + player.getLogin() + " trying to make a debit transaction.");
         if (amount.signum() < 1) {
             throw new NotValidArgumentException("The transaction value cannot be less than or equal to 0.");
         }
@@ -107,6 +114,7 @@ public class MainController {
      * @return the boolean
      */
     public boolean creditTransaction(BigDecimal amount, UUID transactionIdentifier, Player player) {
+        log.info("The player with login " + player.getLogin() + " trying to make a credit transaction.");
         if (amount.signum() < 1) {
             throw new NotValidArgumentException("The transaction value cannot be less than or equal to 0.");
         }

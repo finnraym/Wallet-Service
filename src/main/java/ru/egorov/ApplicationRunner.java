@@ -1,5 +1,7 @@
 package ru.egorov;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.egorov.controller.MainController;
 import ru.egorov.exception.*;
 import ru.egorov.in.InputData;
@@ -15,11 +17,13 @@ import java.util.UUID;
  * The type Application runner.
  */
 public class ApplicationRunner {
+
+    private static final Logger log = LoggerFactory.getLogger(ApplicationRunner.class);
     private static MainController controller;
     private static ProcessStage currentStage;
 
     /**
-     * Run.
+     * Run the application.
      */
     public static void run() {
         ApplicationContext.loadContext();
@@ -47,8 +51,10 @@ public class ApplicationRunner {
                     TransactionAlreadyExistsException |
                     TransactionOperationException |
                     NotValidArgumentException e) {
+                log.warn(e.getMessage());
                 outputData.errOutput(e.getMessage());
             } catch (RuntimeException e) {
+                log.error(e.getMessage());
                 outputData.errOutput("Unknown error. More details " + e.getMessage());
                 processIsRun = false;
             }
