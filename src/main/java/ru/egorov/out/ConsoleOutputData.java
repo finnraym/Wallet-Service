@@ -1,5 +1,8 @@
 package ru.egorov.out;
 
+/**
+ * The type Console output data.
+ */
 public class ConsoleOutputData implements OutputData {
     @Override
     public void output(Object data) {

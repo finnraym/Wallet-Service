@@ -12,6 +12,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type In memory player dao test.
+ */
 class InMemoryPlayerDAOTest {
 
     private InMemoryPlayerDAO playerDAO;
@@ -19,12 +22,19 @@ class InMemoryPlayerDAOTest {
     static private Player player2;
     static private Player player3;
 
+    /**
+     * Init.
+     */
     @BeforeAll
     static void init() {
         player1 = new Player("GOSHAN", "goshka111", BigDecimal.valueOf(2000));
         player2 = new Player("KIRPICH", "red3", BigDecimal.valueOf(120));
         player3 = new Player("LEILA", "12345", BigDecimal.valueOf(999));
     }
+
+    /**
+     * Refresh.
+     */
     @BeforeEach
     void refresh() {
         playerDAO = new InMemoryPlayerDAO();
@@ -33,10 +43,17 @@ class InMemoryPlayerDAOTest {
         playerDAO.save(player3);
     }
 
+    /**
+     * Tear down.
+     */
     @AfterEach
     void tearDown() {
         playerDAO = null;
     }
+
+    /**
+     * Test find by id success.
+     */
     @Test
     void testFindById_Success() {
         Optional<Player> byId = playerDAO.findById(1L);
@@ -47,6 +64,10 @@ class InMemoryPlayerDAOTest {
         assertEquals(result.getPassword(), expected.getPassword());
         assertEquals(result.getBalance(), expected.getBalance());
     }
+
+    /**
+     * Test find by id empty.
+     */
     @Test
     void testFindById_Empty() {
         Optional<Player> byId = playerDAO.findById(10L);
@@ -55,6 +76,9 @@ class InMemoryPlayerDAOTest {
         assertNull(result);
     }
 
+    /**
+     * Test find by login success.
+     */
     @Test
     void testFindByLogin_Success() {
         Optional<Player> byId = playerDAO.findByLogin("GOSHAN");
@@ -66,6 +90,9 @@ class InMemoryPlayerDAOTest {
         assertEquals(result.getBalance(), expected.getBalance());
     }
 
+    /**
+     * Test find by login empty.
+     */
     @Test
     void testFindByLogin_Empty() {
         Optional<Player> byId = playerDAO.findByLogin("Buse4ka");
@@ -74,12 +101,18 @@ class InMemoryPlayerDAOTest {
         assertNull(result);
     }
 
+    /**
+     * Test find all.
+     */
     @Test
     void testFindAll() {
         List<Player> all = playerDAO.findAll();
         assertEquals(3, all.size());
     }
 
+    /**
+     * Test save.
+     */
     @Test
     void testSave() {
         Player newPlayer = new Player("aboba", "7777", BigDecimal.valueOf(0));
@@ -90,6 +123,9 @@ class InMemoryPlayerDAOTest {
         assertEquals(newPlayer.getBalance(), result.getBalance());
     }
 
+    /**
+     * Test update player balance success.
+     */
     @Test
     void testUpdatePlayerBalance_Success() {
         BigDecimal newAmount = BigDecimal.valueOf(666);
@@ -97,6 +133,9 @@ class InMemoryPlayerDAOTest {
         assertTrue(result);
     }
 
+    /**
+     * Test update player balance failed.
+     */
     @Test
     void testUpdatePlayerBalance_Failed() {
         BigDecimal newAmount = BigDecimal.valueOf(666);

@@ -5,6 +5,9 @@ import ru.egorov.model.Transaction;
 
 import java.util.*;
 
+/**
+ * The type In memory transaction dao.
+ */
 public class InMemoryTransactionDAO implements TransactionDAO {
     private final Map<Long, Transaction> transactions = new HashMap<>();
     private Long id = 1L;

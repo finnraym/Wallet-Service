@@ -17,6 +17,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
+/**
+ * The type Security service impl test.
+ */
 @ExtendWith(MockitoExtension.class)
 class SecurityServiceImplTest {
 
@@ -25,6 +28,9 @@ class SecurityServiceImplTest {
     @Mock
     private PlayerDAO playerDAO;
 
+    /**
+     * Test register success.
+     */
     @Test
     void testRegister_Success() {
         String login = "login";
@@ -38,6 +44,9 @@ class SecurityServiceImplTest {
         assertEquals(password, registerPlayer.getPassword());
     }
 
+    /**
+     * Test register throw exception.
+     */
     @Test
     void testRegister_ThrowException() {
         String login = "login";
@@ -48,6 +57,9 @@ class SecurityServiceImplTest {
         assertThrows(RegisterException.class, () -> securityService.register(login, password));
     }
 
+    /**
+     * Test authorization success.
+     */
     @Test
     void testAuthorization_Success() {
         String login = "login";
@@ -60,6 +72,9 @@ class SecurityServiceImplTest {
         assertEquals(password, authorization.getPassword());
     }
 
+    /**
+     * Test authorization throw exception.
+     */
     @Test
     void testAuthorization_ThrowException() {
         String login = "login";

@@ -1,0 +1,10 @@
+ru.egorov
+ru.egorov.controller
+ru.egorov.dao
+ru.egorov.dao.impl
+ru.egorov.exception
+ru.egorov.in
+ru.egorov.model
+ru.egorov.out
+ru.egorov.service
+ru.egorov.service.impl

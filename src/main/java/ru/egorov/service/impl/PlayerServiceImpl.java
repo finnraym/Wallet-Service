@@ -8,10 +8,18 @@ import ru.egorov.service.PlayerService;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+/**
+ * The type Player service.
+ */
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerDAO playerDAO;
 
+    /**
+     * Instantiates a new Player service.
+     *
+     * @param playerDAO the player dao
+     */
     public PlayerServiceImpl(PlayerDAO playerDAO) {
         this.playerDAO = playerDAO;
     }
@@ -19,7 +27,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public BigDecimal getPlayerBalance(Long id) {
         Optional<Player> optionalPlayer = playerDAO.findById(id);
-        Player playerInMemory = optionalPlayer.orElseThrow(() -> new PlayerNotFoundException("Игрок с id " + id + " не найден."));
+        Player playerInMemory = optionalPlayer.orElseThrow(() -> new PlayerNotFoundException("The player with id " + id + " not found."));
         return playerInMemory.getBalance();
     }
 

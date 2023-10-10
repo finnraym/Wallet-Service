@@ -18,6 +18,9 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
+/**
+ * The type Main controller test.
+ */
 @ExtendWith(MockitoExtension.class)
 class MainControllerTest {
 
@@ -31,6 +34,9 @@ class MainControllerTest {
     @Mock
     private PlayerService playerService;
 
+    /**
+     * Test register success.
+     */
     @Test
     void testRegister_Success() {
         String login = "login";
@@ -44,6 +50,9 @@ class MainControllerTest {
         assertEquals(expected, result);
     }
 
+    /**
+     * Test register invalid arguments.
+     */
     @Test
     void testRegister_InvalidArguments() {
         String login = "";
@@ -52,6 +61,9 @@ class MainControllerTest {
         assertThrows(NotValidArgumentException.class, () -> mainController.register(login, password));
     }
 
+    /**
+     * Test authorize success.
+     */
     @Test
     void testAuthorize_Success() {
         String login = "login";
@@ -65,18 +77,27 @@ class MainControllerTest {
         assertEquals(expected, result);
     }
 
+    /**
+     * Test show balance success.
+     */
     @Test
     void testShowBalance_Success() {
         mainController.showBalance(new Player());
         Mockito.verify(playerService, Mockito.times(1)).getPlayerBalance(any());
     }
 
+    /**
+     * Test show transactions history success.
+     */
     @Test
     void testShowTransactionsHistory_Success() {
         mainController.showTransactionsHistory(new Player());
         Mockito.verify(transactionService, Mockito.times(1)).getPlayerHistory(any());
     }
 
+    /**
+     * Test debit transaction success.
+     */
     @Test
     void testDebitTransaction_Success() {
         UUID uuid = UUID.randomUUID();
@@ -86,6 +107,9 @@ class MainControllerTest {
         Mockito.verify(transactionService, Mockito.times(1)).debit(BigDecimal.ONE, uuid, player.getId());
     }
 
+    /**
+     * Test debit transaction invalid argument.
+     */
     @Test
     void testDebitTransaction_InvalidArgument() {
         UUID uuid = UUID.randomUUID();
@@ -93,6 +117,9 @@ class MainControllerTest {
         assertThrows(NotValidArgumentException.class, () -> mainController.debitTransaction(BigDecimal.valueOf(-10), uuid, player));
     }
 
+    /**
+     * Test credit transaction success.
+     */
     @Test
     void testCreditTransaction_Success() {
         UUID uuid = UUID.randomUUID();
@@ -102,6 +129,9 @@ class MainControllerTest {
         Mockito.verify(transactionService, Mockito.times(1)).credit(BigDecimal.ONE, uuid, player.getId());
     }
 
+    /**
+     * Test credit transaction invalid argument.
+     */
     @Test
     void testCreditTransaction_InvalidArgument() {
         UUID uuid = UUID.randomUUID();

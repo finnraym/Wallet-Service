@@ -9,10 +9,18 @@ import ru.egorov.service.SecurityService;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+/**
+ * The type Security service.
+ */
 public class SecurityServiceImpl implements SecurityService {
 
     private final PlayerDAO playerDAO;
 
+    /**
+     * Instantiates a new Security service.
+     *
+     * @param playerDAO the player dao
+     */
     public SecurityServiceImpl(PlayerDAO playerDAO) {
         this.playerDAO = playerDAO;
     }
@@ -21,7 +29,7 @@ public class SecurityServiceImpl implements SecurityService {
     public Player register(String login, String password) {
         Optional<Player> player = playerDAO.findByLogin(login);
         if (player.isPresent()) {
-            throw new RegisterException("Игрок с таким логином уже существует.");
+            throw new RegisterException("The player with this login already exists.");
         }
 
         Player newPlayer = new Player();
@@ -36,12 +44,12 @@ public class SecurityServiceImpl implements SecurityService {
     public Player authorization(String login, String password) {
         Optional<Player> optionalPlayer = playerDAO.findByLogin(login);
         if (optionalPlayer.isEmpty()) {
-            throw new AuthorizeException("Игрока с таким логином нет в базе.");
+            throw new AuthorizeException("There is no player with this login in the database.");
         }
 
         Player player = optionalPlayer.get();
         if (!player.getPassword().equals(password)) {
-            throw new AuthorizeException("Неверный пароль.");
+            throw new AuthorizeException("Incorrect password.");
         }
 
         return player;

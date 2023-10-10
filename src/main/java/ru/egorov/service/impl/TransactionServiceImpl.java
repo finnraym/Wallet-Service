@@ -11,11 +11,20 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Transaction service.
+ */
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionDAO transactionDAO;
     private final PlayerService playerService;
 
+    /**
+     * Instantiates a new Transaction service.
+     *
+     * @param transactionDAO the transaction dao
+     * @param playerService  the player service
+     */
     public TransactionServiceImpl(TransactionDAO transactionDAO, PlayerService playerService) {
         this.transactionDAO = transactionDAO;
         this.playerService = playerService;
@@ -33,7 +42,7 @@ public class TransactionServiceImpl implements TransactionService {
         BigDecimal playerBalance = playerService.getPlayerBalance(playerId);
 
         if (playerBalance.compareTo(amount) < 0) {
-            throw new TransactionOperationException("Недостаточно средств.");
+            throw new TransactionOperationException("Insufficient funds.");
         }
 
         transaction.setAmount(amount);
@@ -71,7 +80,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     private void checkTransaction(UUID transactionIdentifier) {
         if (transactionDAO.findByTransactionIdentifier(transactionIdentifier).isPresent()) {
-            throw new TransactionAlreadyExistsException("Транзакция с идентификатором " + transactionIdentifier + " уже существует.");
+            throw new TransactionAlreadyExistsException("Transaction with ID " + transactionIdentifier + " already exists.");
         }
     }
 }

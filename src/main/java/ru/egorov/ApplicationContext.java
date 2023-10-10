@@ -18,9 +18,15 @@ import ru.egorov.service.impl.TransactionServiceImpl;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Application context.
+ */
 public class ApplicationContext {
     private static final Map<String, Object> CONTEXT = new HashMap<>();
 
+    /**
+     * Load context.
+     */
     public static void loadContext() {
         loadDAOLayer();
         loadServiceLayer();
@@ -28,18 +34,37 @@ public class ApplicationContext {
         loadInputOutputLayer();
     }
 
+    /**
+     * Load authorize player.
+     *
+     * @param player the player
+     */
     public static void loadAuthorizePlayer(Player player) {
         CONTEXT.put("authorize", player);
     }
 
+    /**
+     * Clean authorize player.
+     */
     public static void cleanAuthorizePlayer() {
         CONTEXT.remove("authorize");
     }
 
+    /**
+     * Gets authorize player.
+     *
+     * @return the authorize player
+     */
     public static Player getAuthorizePlayer() {
         return (Player) CONTEXT.get("authorize");
     }
 
+    /**
+     * Gets bean.
+     *
+     * @param beanName the bean name
+     * @return the bean
+     */
     public static Object getBean(String beanName) {
         return CONTEXT.get(beanName);
     }

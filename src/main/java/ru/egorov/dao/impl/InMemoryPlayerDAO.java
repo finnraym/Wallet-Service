@@ -6,6 +6,9 @@ import ru.egorov.model.Player;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * The type In memory player dao.
+ */
 public class InMemoryPlayerDAO implements PlayerDAO {
     private final Map<Long, Player> players = new HashMap<>();
     private Long id = 1L;

@@ -4,10 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+/**
+ * The type Console input data.
+ */
 public class ConsoleInputData implements InputData {
 
     private final BufferedReader reader;
 
+    /**
+     * Instantiates a new Console input data.
+     */
     public ConsoleInputData() {
         reader = new BufferedReader(new InputStreamReader(System.in));
     }

@@ -13,6 +13,9 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * The type In memory transaction dao test.
+ */
 class InMemoryTransactionDAOTest {
 
     private InMemoryTransactionDAO transactionDAO;
@@ -23,6 +26,9 @@ class InMemoryTransactionDAOTest {
     static private Transaction transaction3;
     static private UUID transaction3Identifier;
 
+    /**
+     * Init.
+     */
     @BeforeAll
     static void init() {
         transaction1Identifier = UUID.randomUUID();
@@ -33,6 +39,9 @@ class InMemoryTransactionDAOTest {
         transaction3 = new Transaction("credit", 2L, BigDecimal.valueOf(50), BigDecimal.valueOf(12), BigDecimal.valueOf(62), transaction3Identifier);
     }
 
+    /**
+     * Refresh.
+     */
     @BeforeEach
     void refresh() {
         transactionDAO = new InMemoryTransactionDAO();
@@ -41,10 +50,17 @@ class InMemoryTransactionDAOTest {
         transactionDAO.save(transaction3);
     }
 
+    /**
+     * Tear down.
+     */
     @AfterEach
     void tearDown() {
         transactionDAO = null;
     }
+
+    /**
+     * Test find by id success.
+     */
     @Test
     void testFindById_Success() {
         Optional<Transaction> byId = transactionDAO.findById(1L);
@@ -58,6 +74,9 @@ class InMemoryTransactionDAOTest {
         assertEquals(transaction1.getTransactionIdentifier(), transaction.getTransactionIdentifier());
     }
 
+    /**
+     * Test find by id empty.
+     */
     @Test
     void testFindById_Empty() {
         Optional<Transaction> byId = transactionDAO.findById(1L);
@@ -65,18 +84,27 @@ class InMemoryTransactionDAOTest {
         assertNull(transaction);
     }
 
+    /**
+     * Test find all.
+     */
     @Test
     void testFindAll() {
         List<Transaction> all = transactionDAO.findAll();
         assertEquals(3, all.size());
     }
 
+    /**
+     * Test find all by player id success.
+     */
     @Test
     void testFindAllByPlayerId_Success() {
         List<Transaction> allByPlayerId = transactionDAO.findAllByPlayerId(1L);
         assertEquals(2, allByPlayerId.size());
     }
 
+    /**
+     * Test find by transaction identifier success.
+     */
     @Test
     void testFindByTransactionIdentifier_Success() {
         Optional<Transaction> byTransactionIdentifier = transactionDAO.findByTransactionIdentifier(transaction1Identifier);
@@ -90,6 +118,9 @@ class InMemoryTransactionDAOTest {
         assertEquals(transaction1.getTransactionIdentifier(), transaction.getTransactionIdentifier());
     }
 
+    /**
+     * Test find by transaction identifier empty.
+     */
     @Test
     void testFindByTransactionIdentifier_Empty() {
         Optional<Transaction> byTransactionIdentifier = transactionDAO.findByTransactionIdentifier(transaction1Identifier);

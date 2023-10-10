@@ -11,17 +11,23 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * The type Application runner.
+ */
 public class ApplicationRunner {
     private static MainController controller;
     private static ProcessStage currentStage;
 
+    /**
+     * Run.
+     */
     public static void run() {
         ApplicationContext.loadContext();
         InputData inputData = (InputData) ApplicationContext.getBean("input");
         OutputData outputData = (OutputData) ApplicationContext.getBean("output");
         controller = (MainController) ApplicationContext.getBean("controller");
         currentStage = ProcessStage.SECURITY;
-        outputData.output("Добро пожаловать в приложение по управлению счетом для игроков!\n");
+        outputData.output("Welcome to the account management application for players!\n");
 
         boolean processIsRun = true;
         while (processIsRun) {
@@ -43,7 +49,7 @@ public class ApplicationRunner {
                     NotValidArgumentException e) {
                 outputData.errOutput(e.getMessage());
             } catch (RuntimeException e) {
-                outputData.errOutput("Неизвестная ошибка. Подробнее " + e.getMessage());
+                outputData.errOutput("Unknown error. More details " + e.getMessage());
                 processIsRun = false;
             }
         }
@@ -53,64 +59,64 @@ public class ApplicationRunner {
     private static void creditProcess(InputData inputData, OutputData outputData) {
         double amount = transactionProcess(inputData, outputData);
         controller.creditTransaction(BigDecimal.valueOf(amount), UUID.randomUUID(), ApplicationContext.getAuthorizePlayer());
-        outputData.output("Транзакция успешно проведена.\n");
+        outputData.output("The transaction was completed successfully.\n");
         currentStage = ProcessStage.MAIN_MENU;
     }
 
     private static void debitProcess(InputData inputData, OutputData outputData) {
         double amount = transactionProcess(inputData, outputData);
         controller.debitTransaction(BigDecimal.valueOf(amount), UUID.randomUUID(), ApplicationContext.getAuthorizePlayer());
-        outputData.output("Транзакция успешно проведена.\n");
+        outputData.output("The transaction was completed successfully.\n");
         currentStage = ProcessStage.MAIN_MENU;
     }
 
     private static double transactionProcess(InputData inputData, OutputData outputData) {
-        final String msg = "Введите сумму транзакции. Если хотите отменить, то напишите слово \"Отмена\":";
+        final String msg = "Enter the transaction amount. If you want to cancel, then write the word \"Cancel\":";
         outputData.output(msg);
         String request = inputData.input().toString();
-        if (request.equalsIgnoreCase("отмена")) {
+        if (request.equalsIgnoreCase("cancel")) {
             currentStage = ProcessStage.MAIN_MENU;
-            throw new TransactionOperationException("Отмена транзакции.");
+            throw new TransactionOperationException("Cancel the transaction.");
         }
         double amount = 0;
         try {
             amount = Double.parseDouble(request);
         } catch (NumberFormatException e) {
-            outputData.errOutput("Неверный формат. Пожалуйста введите число.\n");
+            outputData.errOutput("Wrong format. Please enter a number.\n");
         }
         return amount;
     }
 
     private static void menuProcess(InputData inputData, OutputData outputData) {
         final String menu = """
-                Выберите действие:
-                Посмотреть свой баланс - 1
-                Посмотреть историю транзакций - 2
-                Снять средства - 3
-                Пополнить средства - 4
-                Выйти из аккаунта - 5
-                Выйти из приложения - 0
+                Choose an action:
+                View your balance - 1
+                View transaction history - 2
+                Withdraw funds - 3
+                Top up funds - 4
+                Log out of account - 5
+                Quit the application - 0
                 """;
         while (true) {
             outputData.output(menu);
             String input = inputData.input().toString();
             if (input.equals("1")) {
                 BigDecimal balance = controller.showBalance(ApplicationContext.getAuthorizePlayer());
-                String response = "Ваш баланс: " + balance.toString();
+                String response = "Your balance: " + balance.toString();
                 outputData.output(response);
             } else if (input.equals("2")) {
                 List<Transaction> history = controller.showTransactionsHistory(ApplicationContext.getAuthorizePlayer());
                 if (history == null || history.isEmpty()) {
-                    outputData.output("У вас пока не было проведенных транзакций.\n");
+                    outputData.output("You have not completed any transactions yet.\n");
                 } else {
-                    outputData.output("История ваших транзакций:");
+                    outputData.output("Your transaction history: ");
                     for (Transaction transaction : history) {
                         outputData.output(
-                                "Идентификатор транзакции - " + transaction.getTransactionIdentifier() +
-                                        ", тип транзакции - " + transaction.getType() +
-                                        ", баланс до - " + transaction.getBalanceBefore() +
-                                        ", значение транзакции - " + transaction.getAmount() +
-                                        ", баланс после - " + transaction.getBalanceAfter()
+                                "Transaction ID - " + transaction.getTransactionIdentifier() +
+                                        ", transaction type - " + transaction.getType() +
+                                        ", balance before - " + transaction.getBalanceBefore() +
+                                        ", transaction amount - " + transaction.getAmount() +
+                                        ", balance after - " + transaction.getBalanceAfter()
                         );
                     }
                 }
@@ -129,18 +135,18 @@ public class ApplicationRunner {
                 currentStage = ProcessStage.EXIT;
                 break;
             } else {
-                outputData.output("Неизвестная команда, попробуйте ещё раз.\n");
+                outputData.output("Unknown command, try again.\n");
             }
         }
     }
 
     private static void securityProcess(InputData inputData, OutputData outputData) {
-        final String firstMessage = "Пожалуйста, зарегистрируйтесь или авторизуйтесь в приложении.";
+        final String firstMessage = "Please register or log in to the application.";
         final String menu = """
-                Введите одно число без пробелов и других символов:
-                Зарегистрироваться - 1
-                Авторизоваться - 2
-                Выйти из приложения - 3
+                Enter one number without spaces or other symbols:
+                Register - 1
+                Login - 2
+                Exit the application - 3
                 """;
 
         outputData.output(firstMessage);
@@ -148,10 +154,10 @@ public class ApplicationRunner {
             outputData.output(menu);
             Object input = inputData.input();
             if (input.toString().equals("1")) {
-                final String loginMsg = "Введите логин:";
+                final String loginMsg = "Enter login:";
                 outputData.output(loginMsg);
                 String login = inputData.input().toString();
-                final String passMsg = "Введите пароль. Пароль не может быть пустым и должен быть длиной от 4 до 32 символов:";
+                final String passMsg = "Enter password. The password cannot be empty and must be between 4 and 32 characters long:";
                 outputData.output(passMsg);
                 String password = inputData.input().toString();
 
@@ -160,10 +166,10 @@ public class ApplicationRunner {
                 currentStage = ProcessStage.MAIN_MENU;
                 break;
             } else if (input.toString().equals("2")) {
-                final String loginMsg = "Введите логин:";
+                final String loginMsg = "Enter login:";
                 outputData.output(loginMsg);
                 String login = inputData.input().toString();
-                final String passMsg = "Введите пароль:";
+                final String passMsg = "Enter password:";
                 outputData.output(passMsg);
                 String password = inputData.input().toString();
 
@@ -175,17 +181,36 @@ public class ApplicationRunner {
                 currentStage = ProcessStage.EXIT;
                 break;
             } else {
-                outputData.output("Неизвестная команда, попробуйте ещё раз.");
+                outputData.output("Unknown command, try again.");
             }
         }
     }
 
     private static void exitProcess(OutputData outputData) {
-        final String message = "До свидания!";
+        final String message = "Goodbye!";
         outputData.output(message);
         ApplicationContext.cleanAuthorizePlayer();
     }
     private enum ProcessStage {
-        SECURITY, MAIN_MENU, DEBIT_PROCESS, CREDIT_PROCESS, EXIT
+        /**
+         * Security process stage.
+         */
+        SECURITY,
+        /**
+         * Main menu process stage.
+         */
+        MAIN_MENU,
+        /**
+         * Debit process process stage.
+         */
+        DEBIT_PROCESS,
+        /**
+         * Credit process process stage.
+         */
+        CREDIT_PROCESS,
+        /**
+         * Exit process stage.
+         */
+        EXIT
     }
 }
