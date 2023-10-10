@@ -1,6 +1,7 @@
 package ru.egorov.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Player {
     private Long id;
@@ -9,6 +10,12 @@ public class Player {
     private BigDecimal balance;
 
     public Player() {
+    }
+
+    public Player(String login, String password, BigDecimal balance) {
+        this.login = login;
+        this.password = password;
+        this.balance = balance;
     }
 
     public Long getId() {
@@ -41,5 +48,18 @@ public class Player {
 
     public void setBalance(BigDecimal balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return Objects.equals(login, player.login) && Objects.equals(password, player.password) && Objects.equals(balance, player.balance);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(login, password, balance);
     }
 }

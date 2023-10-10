@@ -1,6 +1,7 @@
 package ru.egorov.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Transaction {
@@ -12,6 +13,15 @@ public class Transaction {
     private BigDecimal amount;
     private UUID transactionIdentifier;
     public Transaction() {
+    }
+
+    public Transaction(String type, Long playerId, BigDecimal balanceBefore, BigDecimal balanceAfter, BigDecimal amount, UUID transactionIdentifier) {
+        this.type = type;
+        this.playerId = playerId;
+        this.balanceBefore = balanceBefore;
+        this.balanceAfter = balanceAfter;
+        this.amount = amount;
+        this.transactionIdentifier = transactionIdentifier;
     }
 
     public BigDecimal getBalanceBefore() {
@@ -70,4 +80,16 @@ public class Transaction {
         this.transactionIdentifier = transactionIdentifier;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Objects.equals(type, that.type) && Objects.equals(playerId, that.playerId) && Objects.equals(balanceBefore, that.balanceBefore) && Objects.equals(balanceAfter, that.balanceAfter) && Objects.equals(amount, that.amount) && Objects.equals(transactionIdentifier, that.transactionIdentifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, playerId, balanceBefore, balanceAfter, amount, transactionIdentifier);
+    }
 }
