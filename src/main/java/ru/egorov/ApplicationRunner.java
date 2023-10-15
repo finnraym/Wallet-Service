@@ -2,6 +2,7 @@ package ru.egorov;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.egorov.config.DatabaseConfiguration;
 import ru.egorov.controller.MainController;
 import ru.egorov.exception.*;
 import ru.egorov.in.InputData;
@@ -27,8 +28,10 @@ public class ApplicationRunner {
      */
     public static void run() {
         ApplicationContext.loadContext();
+        DatabaseConfiguration.dbMigration();
         InputData inputData = (InputData) ApplicationContext.getBean("input");
         OutputData outputData = (OutputData) ApplicationContext.getBean("output");
+        outputData.output("Migrations completed successfully!");
         controller = (MainController) ApplicationContext.getBean("controller");
         currentStage = ProcessStage.SECURITY;
         outputData.output("Welcome to the account management application for players!\n");

@@ -15,19 +15,47 @@ import ru.egorov.service.impl.PlayerServiceImpl;
 import ru.egorov.service.impl.SecurityServiceImpl;
 import ru.egorov.service.impl.TransactionServiceImpl;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * The type Application context.
  */
 public class ApplicationContext {
     private static final Map<String, Object> CONTEXT = new HashMap<>();
+    private static Properties properties;
+    private static final String PROPERTIES_FILEPATH = getPropertiesFilepath();
 
+    public static Properties getProperties() {
+        if (properties == null) loadProperties();
+        return properties;
+    }
+
+    private static void loadProperties() {
+        if (properties == null) {
+            properties = new Properties();
+            try (InputStream stream = Files.newInputStream(Paths.get(PROPERTIES_FILEPATH))) {
+                properties.load(stream);
+            } catch (IOException e) {
+                throw new RuntimeException("Error reading configuration file: " + e.getMessage());
+            }
+        }
+    }
+
+    private static String getPropertiesFilepath() {
+        return "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
+    }
     /**
      * Load context.
      */
     public static void loadContext() {
+        loadProperties();
         loadDAOLayer();
         loadServiceLayer();
         loadControllers();
