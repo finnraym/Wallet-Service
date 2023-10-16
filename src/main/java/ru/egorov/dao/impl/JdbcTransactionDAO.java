@@ -1,6 +1,6 @@
 package ru.egorov.dao.impl;
 
-import ru.egorov.config.DatabaseConfiguration;
+import ru.egorov.config.DBConnectionProvider;
 import ru.egorov.dao.TransactionDAO;
 import ru.egorov.model.Transaction;
 
@@ -13,12 +13,18 @@ import java.util.*;
 
 public class JdbcTransactionDAO implements TransactionDAO {
 
+    private final DBConnectionProvider connectionProvider;
+
+    public JdbcTransactionDAO(DBConnectionProvider connectionProvider) {
+        this.connectionProvider = connectionProvider;
+    }
+
     @Override
     public Optional<Transaction> findById(Long id) {
         Optional<Transaction> optionalTransaction = Optional.empty();
         String sql = "SELECT tr.type, tr.player_id, tr.balance_before, tr.balance_after, tr.amount, tr.transaction_identifier " +
                 "FROM develop.transaction tr WHERE tr.id=?";
-        try(Connection connection = DatabaseConfiguration.getConnection();
+        try(Connection connection = connectionProvider.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -37,7 +43,7 @@ public class JdbcTransactionDAO implements TransactionDAO {
         List<Transaction> all = new ArrayList<>();
         String sql = "SELECT tr.type, tr.player_id, tr.balance_before, tr.balance_after, tr.amount, tr.transaction_identifier " +
                 "FROM develop.transaction tr";
-        try(Connection connection = DatabaseConfiguration.getConnection();
+        try(Connection connection = connectionProvider.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             while (resultSet.next()) {
@@ -53,7 +59,7 @@ public class JdbcTransactionDAO implements TransactionDAO {
     @Override
     public Transaction save(Transaction entity) {
         String sql = "INSERT INTO develop.transaction(type, player_id, balance_before, balance_after, amount, transaction_identifier) VALUES(?, ?, ?, ?, ?, ?)";
-        try(Connection connection = DatabaseConfiguration.getConnection();
+        try(Connection connection = connectionProvider.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, entity.getType());
             preparedStatement.setLong(2, entity.getPlayerId());
@@ -74,7 +80,7 @@ public class JdbcTransactionDAO implements TransactionDAO {
         List<Transaction> all = new ArrayList<>();
         String sql = "SELECT tr.type, tr.player_id, tr.balance_before, tr.balance_after, tr.amount, tr.transaction_identifier " +
                 "FROM develop.transaction tr WHERE tr.player_id=?";
-        try(Connection connection = DatabaseConfiguration.getConnection();
+        try(Connection connection = connectionProvider.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, playerId);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -94,7 +100,7 @@ public class JdbcTransactionDAO implements TransactionDAO {
         Optional<Transaction> optionalTransaction = Optional.empty();
         String sql = "SELECT tr.type, tr.player_id, tr.balance_before, tr.balance_after, tr.amount, tr.transaction_identifier " +
                 "FROM develop.transaction tr WHERE tr.transaction_identifier=?";
-        try(Connection connection = DatabaseConfiguration.getConnection();
+        try(Connection connection = connectionProvider.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, transactionIdentifier.toString());
             ResultSet resultSet = preparedStatement.executeQuery();

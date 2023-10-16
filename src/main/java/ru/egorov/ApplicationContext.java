@@ -1,5 +1,7 @@
 package ru.egorov;
 
+import ru.egorov.config.DBConnectionProvider;
+import ru.egorov.config.DBMigrationService;
 import ru.egorov.controller.MainController;
 import ru.egorov.dao.PlayerDAO;
 import ru.egorov.dao.TransactionDAO;
@@ -37,10 +39,26 @@ public class ApplicationContext {
      */
     public static void loadContext() {
         loadProperties();
+        databaseConfiguration();
         loadDAOLayer();
         loadServiceLayer();
         loadControllers();
         loadInputOutputLayer();
+    }
+
+    private static void databaseConfiguration() {
+        String dbUrl = properties.getProperty("db.url");
+        String dbUser = properties.getProperty("db.user");
+        String dbPassword = properties.getProperty("db.password");
+        DBConnectionProvider connectionProvider = new DBConnectionProvider(dbUrl, dbUser, dbPassword);
+        CONTEXT.put("connectionProvider", connectionProvider);
+
+        String changeLogFile = properties.getProperty("liquibase.changeLogFile");
+        String schemaName = properties.getProperty("liquibase.schemaName");
+
+        DBMigrationService migrationService = new DBMigrationService(connectionProvider, schemaName, changeLogFile);
+        migrationService.migration();
+        CONTEXT.put("migrationService", migrationService);
     }
 
     public static Properties getProperties() {
@@ -112,8 +130,8 @@ public class ApplicationContext {
     }
 
     private static void loadDAOLayer() {
-        CONTEXT.put("playerDAO", new JdbcPlayerDAO());
-        CONTEXT.put("transactionDAO", new JdbcTransactionDAO());
+        CONTEXT.put("playerDAO", new JdbcPlayerDAO((DBConnectionProvider) CONTEXT.get("connectionProvider")));
+        CONTEXT.put("transactionDAO", new JdbcTransactionDAO((DBConnectionProvider) CONTEXT.get("connectionProvider")));
     }
 
     private static void loadServiceLayer() {

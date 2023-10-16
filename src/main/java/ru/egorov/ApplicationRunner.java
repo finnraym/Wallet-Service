@@ -2,7 +2,6 @@ package ru.egorov;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.egorov.config.DatabaseConfiguration;
 import ru.egorov.controller.MainController;
 import ru.egorov.exception.*;
 import ru.egorov.in.InputData;
@@ -28,7 +27,6 @@ public class ApplicationRunner {
      */
     public static void run() {
         ApplicationContext.loadContext();
-        DatabaseConfiguration.migration();
         InputData inputData = (InputData) ApplicationContext.getBean("input");
         OutputData outputData = (OutputData) ApplicationContext.getBean("output");
         outputData.output("Migrations completed successfully!");
