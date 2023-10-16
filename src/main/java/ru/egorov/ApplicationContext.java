@@ -3,8 +3,8 @@ package ru.egorov;
 import ru.egorov.controller.MainController;
 import ru.egorov.dao.PlayerDAO;
 import ru.egorov.dao.TransactionDAO;
-import ru.egorov.dao.impl.InMemoryPlayerDAO;
-import ru.egorov.dao.impl.InMemoryTransactionDAO;
+import ru.egorov.dao.impl.JdbcPlayerDAO;
+import ru.egorov.dao.impl.JdbcTransactionDAO;
 import ru.egorov.in.ConsoleInputData;
 import ru.egorov.model.Player;
 import ru.egorov.out.ConsoleOutputData;
@@ -32,6 +32,17 @@ public class ApplicationContext {
     private static Properties properties;
     private static final String PROPERTIES_FILEPATH = getPropertiesFilepath();
 
+    /**
+     * Load context.
+     */
+    public static void loadContext() {
+        loadProperties();
+        loadDAOLayer();
+        loadServiceLayer();
+        loadControllers();
+        loadInputOutputLayer();
+    }
+
     public static Properties getProperties() {
         if (properties == null) loadProperties();
         return properties;
@@ -47,19 +58,8 @@ public class ApplicationContext {
             }
         }
     }
-
     private static String getPropertiesFilepath() {
         return "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
-    }
-    /**
-     * Load context.
-     */
-    public static void loadContext() {
-        loadProperties();
-        loadDAOLayer();
-        loadServiceLayer();
-        loadControllers();
-        loadInputOutputLayer();
     }
 
     /**
@@ -112,8 +112,8 @@ public class ApplicationContext {
     }
 
     private static void loadDAOLayer() {
-        CONTEXT.put("playerDAO", new InMemoryPlayerDAO());
-        CONTEXT.put("transactionDAO", new InMemoryTransactionDAO());
+        CONTEXT.put("playerDAO", new JdbcPlayerDAO());
+        CONTEXT.put("transactionDAO", new JdbcTransactionDAO());
     }
 
     private static void loadServiceLayer() {

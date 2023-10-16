@@ -33,7 +33,7 @@
             <column name="balance_before" type="DECIMAL(10,2)"/>
             <column name="balance_after" type="DECIMAL(10,2)"/>
             <column name="amount" type="DECIMAL(10,2)"/>
-            <column name="transaction_identifier" type="uuid">
+            <column name="transaction_identifier" type="VARCHAR(255)">
                 <constraints unique="true"/>
             </column>
         </createTable>

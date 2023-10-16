@@ -28,7 +28,7 @@ public class ApplicationRunner {
      */
     public static void run() {
         ApplicationContext.loadContext();
-        DatabaseConfiguration.dbMigration();
+        DatabaseConfiguration.migration();
         InputData inputData = (InputData) ApplicationContext.getBean("input");
         OutputData outputData = (OutputData) ApplicationContext.getBean("output");
         outputData.output("Migrations completed successfully!");
