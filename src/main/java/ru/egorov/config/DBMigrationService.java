@@ -10,6 +10,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * The database migration service class.
+ */
 public class DBMigrationService {
 
     private final DBConnectionProvider connectionProvider;
@@ -22,6 +25,10 @@ public class DBMigrationService {
         this.changeLogFile = changeLogFile;
     }
 
+    /**
+     * Performs database migration.
+     *
+     */
     public void migration() {
         try(Connection connection = connectionProvider.getConnection()) {
             createSchemaForMigration(connection);

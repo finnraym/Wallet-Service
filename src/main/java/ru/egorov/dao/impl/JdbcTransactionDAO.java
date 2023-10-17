@@ -11,6 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * The jdbc transaction dao implementation.
+ */
 public class JdbcTransactionDAO implements TransactionDAO {
 
     private final DBConnectionProvider connectionProvider;

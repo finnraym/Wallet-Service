@@ -3,6 +3,9 @@ package ru.egorov.config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+/**
+ * The database connection provider class.
+ */
 public class DBConnectionProvider {
     private final String url;
     private final String username;
@@ -14,6 +17,11 @@ public class DBConnectionProvider {
         this.password = password;
     }
 
+    /**
+     * Open connection to database.
+     *
+     * @return the connection
+     */
     public Connection getConnection() {
         try {
             return DriverManager.getConnection(url, username, password);

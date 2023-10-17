@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The jdbc player dao implementation.
+ */
 public class JdbcPlayerDAO implements PlayerDAO {
 
     private final DBConnectionProvider connectionProvider;
