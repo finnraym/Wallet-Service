@@ -34,7 +34,7 @@
             <column name="balance_after" type="DECIMAL(10,2)"/>
             <column name="amount" type="DECIMAL(10,2)"/>
             <column name="transaction_identifier" type="VARCHAR(255)">
-                <constraints unique="true"/>
+                <constraints unique="true" nullable="false"/>
             </column>
         </createTable>
     </changeSet>
