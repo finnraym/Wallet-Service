@@ -29,6 +29,7 @@ public class ApplicationRunner {
         ApplicationContext.loadContext();
         InputData inputData = (InputData) ApplicationContext.getBean("input");
         OutputData outputData = (OutputData) ApplicationContext.getBean("output");
+        outputData.output("Migrations completed successfully!");
         controller = (MainController) ApplicationContext.getBean("controller");
         currentStage = ProcessStage.SECURITY;
         outputData.output("Welcome to the account management application for players!\n");

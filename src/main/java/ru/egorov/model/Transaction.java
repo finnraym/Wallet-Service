@@ -25,7 +25,7 @@ public class Transaction {
     /**
      * Instantiates a new Transaction.
      *
-     * @param type                  the type
+     * @param type                  the type of transaction
      * @param playerId              the player id
      * @param balanceBefore         the balance before
      * @param balanceAfter          the balance after

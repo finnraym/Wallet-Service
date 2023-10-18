@@ -1,10 +1,12 @@
 package ru.egorov;
 
+import ru.egorov.config.DBConnectionProvider;
+import ru.egorov.config.DBMigrationService;
 import ru.egorov.controller.MainController;
 import ru.egorov.dao.PlayerDAO;
 import ru.egorov.dao.TransactionDAO;
-import ru.egorov.dao.impl.InMemoryPlayerDAO;
-import ru.egorov.dao.impl.InMemoryTransactionDAO;
+import ru.egorov.dao.impl.JdbcPlayerDAO;
+import ru.egorov.dao.impl.JdbcTransactionDAO;
 import ru.egorov.in.ConsoleInputData;
 import ru.egorov.model.Player;
 import ru.egorov.out.ConsoleOutputData;
@@ -15,23 +17,67 @@ import ru.egorov.service.impl.PlayerServiceImpl;
 import ru.egorov.service.impl.SecurityServiceImpl;
 import ru.egorov.service.impl.TransactionServiceImpl;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * The type Application context.
  */
 public class ApplicationContext {
     private static final Map<String, Object> CONTEXT = new HashMap<>();
+    private static Properties properties;
+    private static final String PROPERTIES_FILEPATH = getPropertiesFilepath();
 
     /**
      * Load context.
      */
     public static void loadContext() {
+        loadProperties();
+        databaseConfiguration();
         loadDAOLayer();
         loadServiceLayer();
         loadControllers();
         loadInputOutputLayer();
+    }
+
+    private static void databaseConfiguration() {
+        String dbUrl = properties.getProperty("db.url");
+        String dbUser = properties.getProperty("db.user");
+        String dbPassword = properties.getProperty("db.password");
+        DBConnectionProvider connectionProvider = new DBConnectionProvider(dbUrl, dbUser, dbPassword);
+        CONTEXT.put("connectionProvider", connectionProvider);
+
+        String changeLogFile = properties.getProperty("liquibase.changeLogFile");
+        String schemaName = properties.getProperty("liquibase.schemaName");
+
+        DBMigrationService migrationService = new DBMigrationService(connectionProvider, schemaName, changeLogFile);
+        migrationService.migration();
+        CONTEXT.put("migrationService", migrationService);
+    }
+
+    public static Properties getProperties() {
+        if (properties == null) loadProperties();
+        return properties;
+    }
+
+    private static void loadProperties() {
+        if (properties == null) {
+            properties = new Properties();
+            try (InputStream stream = Files.newInputStream(Paths.get(PROPERTIES_FILEPATH))) {
+                properties.load(stream);
+            } catch (IOException e) {
+                throw new RuntimeException("Error reading configuration file: " + e.getMessage());
+            }
+        }
+    }
+    private static String getPropertiesFilepath() {
+        return "src" + File.separator + "main" + File.separator + "resources" + File.separator + "application.properties";
     }
 
     /**
@@ -84,8 +130,8 @@ public class ApplicationContext {
     }
 
     private static void loadDAOLayer() {
-        CONTEXT.put("playerDAO", new InMemoryPlayerDAO());
-        CONTEXT.put("transactionDAO", new InMemoryTransactionDAO());
+        CONTEXT.put("playerDAO", new JdbcPlayerDAO((DBConnectionProvider) CONTEXT.get("connectionProvider")));
+        CONTEXT.put("transactionDAO", new JdbcTransactionDAO((DBConnectionProvider) CONTEXT.get("connectionProvider")));
     }
 
     private static void loadServiceLayer() {
