@@ -108,11 +108,11 @@ public class Player {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return Objects.equals(login, player.login) && Objects.equals(password, player.password) && Objects.equals(balance, player.balance);
+        return Objects.equals(login, player.login) && Objects.equals(password, player.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(login, password, balance);
+        return Objects.hash(login, password);
     }
 }

@@ -35,4 +35,10 @@ public class PlayerServiceImpl implements PlayerService {
     public boolean updateBalance(Long id, BigDecimal balance) {
         return playerDAO.updatePlayerBalance(id, balance);
     }
+
+    @Override
+    public Player getByLogin(String login) {
+        Optional<Player> optionalPlayer = playerDAO.findByLogin(login);
+        return optionalPlayer.orElseThrow(() -> new PlayerNotFoundException("Player with login " + login + " not found!"));
+    }
 }

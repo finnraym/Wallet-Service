@@ -10,11 +10,18 @@ public class DBConnectionProvider {
     private final String url;
     private final String username;
     private final String password;
+    private final String driver;
 
-    public DBConnectionProvider(String url, String username, String password) {
+    public DBConnectionProvider(String url, String username, String password, String driver) {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.driver = driver;
+        try {
+            Class.forName(driver);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 package ru.egorov.service;
 
+import ru.egorov.model.Player;
+
 import java.math.BigDecimal;
 
 /**
@@ -23,5 +25,7 @@ public interface PlayerService {
      * @return the boolean
      */
     boolean updateBalance(Long id, BigDecimal balance);
+
+    Player getByLogin(String login);
 
 }
