@@ -1,5 +1,6 @@
 package ru.egorov.service.impl;
 
+import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.dao.PlayerDAO;
 import ru.egorov.exception.AuthorizeException;
 import ru.egorov.exception.RegisterException;
@@ -15,6 +16,7 @@ import java.util.Optional;
 /**
  * The type Security service.
  */
+@Loggable
 public class SecurityServiceImpl implements SecurityService {
 
     private final PlayerDAO playerDAO;

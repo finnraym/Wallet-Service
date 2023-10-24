@@ -1,5 +1,6 @@
 package ru.egorov.in.servlets;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletInputStream;
@@ -28,23 +29,18 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        req.setCharacterEncoding("UTF-8");
-        resp.setContentType("application/json; charset=UTF-8");
-
         try(ServletInputStream inputStream = req.getInputStream()) {
             SecurityDTO securityDTO = jacksonMapper.readValue(inputStream, SecurityDTO.class);
             Player registered = securityService.register(securityDTO.login(), securityDTO.password());
 
             resp.setStatus(HttpServletResponse.SC_CREATED);
             jacksonMapper.writeValue(resp.getWriter(), new SuccessResponse("Player with login " + registered.getLogin() + " successfully created."));
-        } catch (RegisterException e) {
+        } catch (RegisterException | JsonParseException e) {
             resp.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage());
-            jacksonMapper.writeValue(resp.getWriter(), exceptionResponse);
+            jacksonMapper.writeValue(resp.getWriter(), new ExceptionResponse(e.getMessage()));
         } catch (RuntimeException e) {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            ExceptionResponse exceptionResponse = new ExceptionResponse(e.getMessage());
-            jacksonMapper.writeValue(resp.getWriter(), exceptionResponse);
+            jacksonMapper.writeValue(resp.getWriter(), new ExceptionResponse(e.getMessage()));
         }
     }
 }

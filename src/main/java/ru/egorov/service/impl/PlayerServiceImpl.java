@@ -1,5 +1,6 @@
 package ru.egorov.service.impl;
 
+import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.dao.PlayerDAO;
 import ru.egorov.exception.PlayerNotFoundException;
 import ru.egorov.model.Player;
@@ -11,6 +12,8 @@ import java.util.Optional;
 /**
  * The type Player service.
  */
+
+@Loggable
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerDAO playerDAO;

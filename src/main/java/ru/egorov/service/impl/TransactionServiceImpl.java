@@ -1,5 +1,6 @@
 package ru.egorov.service.impl;
 
+import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.dao.TransactionDAO;
 import ru.egorov.exception.TransactionAlreadyExistsException;
 import ru.egorov.exception.TransactionOperationException;
@@ -14,6 +15,8 @@ import java.util.UUID;
 /**
  * The type Transaction service.
  */
+
+@Loggable
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionDAO transactionDAO;

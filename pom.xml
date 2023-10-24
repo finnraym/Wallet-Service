@@ -16,7 +16,7 @@
         <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
         <lombok.version>1.18.30</lombok.version>
         <jackson.version>2.15.3</jackson.version>
-        <aspectj.version>1.9.20.1</aspectj.version>
+        <aspectj.version>1.9.7</aspectj.version>
         <plugin.war.version>3.3.1</plugin.war.version>
         <plugin.aspectj.version>1.14.0</plugin.aspectj.version>
         <postgresql.version>42.6.0</postgresql.version>
@@ -49,11 +49,6 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${aspectj.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
             <version>${log4j.version}</version>
@@ -79,6 +74,11 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>${jjwt.version}</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj.version}</version>
         </dependency>
 
         <!--        database dependencies       -->
@@ -176,6 +176,7 @@
                     <execution>
                         <goals>
                             <goal>compile</goal>
+                            <goal>test-compile</goal>
                         </goals>
                     </execution>
                 </executions>

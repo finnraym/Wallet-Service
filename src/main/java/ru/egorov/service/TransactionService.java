@@ -1,5 +1,6 @@
 package ru.egorov.service;
 
+import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.model.Transaction;
 
 import java.math.BigDecimal;

@@ -60,12 +60,13 @@ public class JwtTokenProvider {
         return new JwtResponse(login, createAccessToken(login), createRefreshToken(login));
     }
 
-    public Player authentication(String token) throws AccessDeniedException {
+    public Authentication authentication(String token) throws AccessDeniedException {
         if (!validateToken(token)) {
             throw new AccessDeniedException("Access denied!");
         }
         String login = getLoginFromToken(token);
-        return playerService.getByLogin(login);
+        playerService.getByLogin(login);
+        return new Authentication(login, true, null);
     }
 
     private String getLoginFromToken(String token) {
@@ -78,7 +79,7 @@ public class JwtTokenProvider {
     }
 
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) throws RuntimeException {
         Jws<Claims> claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

@@ -5,6 +5,16 @@
          version="3.1">
 
     <filter>
+        <filter-name>GlobalFilter</filter-name>
+        <filter-class>ru.egorov.in.filters.GlobalFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>GlobalFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
         <filter-name>JwtTokenFilter</filter-name>
         <filter-class>ru.egorov.in.security.JwtTokenFilter</filter-class>
     </filter>
