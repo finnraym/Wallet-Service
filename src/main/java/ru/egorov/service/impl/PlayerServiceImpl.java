@@ -1,5 +1,6 @@
 package ru.egorov.service.impl;
 
+import ru.egorov.aop.annotations.Audit;
 import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.dao.PlayerDAO;
 import ru.egorov.exception.PlayerNotFoundException;
@@ -27,6 +28,7 @@ public class PlayerServiceImpl implements PlayerService {
         this.playerDAO = playerDAO;
     }
 
+    @Audit
     @Override
     public BigDecimal getPlayerBalance(Long id) {
         Optional<Player> optionalPlayer = playerDAO.findById(id);

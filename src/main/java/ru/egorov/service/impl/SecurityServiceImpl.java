@@ -1,5 +1,6 @@
 package ru.egorov.service.impl;
 
+import ru.egorov.aop.annotations.Audit;
 import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.dao.PlayerDAO;
 import ru.egorov.exception.AuthorizeException;
@@ -16,7 +17,6 @@ import java.util.Optional;
 /**
  * The type Security service.
  */
-@Loggable
 public class SecurityServiceImpl implements SecurityService {
 
     private final PlayerDAO playerDAO;
@@ -33,6 +33,7 @@ public class SecurityServiceImpl implements SecurityService {
         this.tokenProvider = tokenProvider;
     }
 
+    @Audit
     @Override
     public Player register(String login, String password) {
         Optional<Player> player = playerDAO.findByLogin(login);
@@ -48,6 +49,7 @@ public class SecurityServiceImpl implements SecurityService {
         return playerDAO.save(newPlayer);
     }
 
+    @Audit
     @Override
     public JwtResponse authorization(String login, String password) {
         Optional<Player> optionalPlayer = playerDAO.findByLogin(login);

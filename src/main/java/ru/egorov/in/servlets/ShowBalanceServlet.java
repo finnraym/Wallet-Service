@@ -6,7 +6,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.exception.AuthorizeException;
 import ru.egorov.exception.PlayerNotFoundException;
 import ru.egorov.exception.ValidationParametersException;
@@ -18,10 +17,8 @@ import ru.egorov.service.PlayerService;
 
 import java.io.IOException;
 
-@Loggable
 @WebServlet("/players/balance")
 public class ShowBalanceServlet extends HttpServlet {
-
     private PlayerService playerService;
     private ObjectMapper jacksonMapper;
     private PlayerMapper playerMapper;
@@ -61,5 +58,29 @@ public class ShowBalanceServlet extends HttpServlet {
         if (!authentication.getLogin().equals(entity.getLogin())) throw new AuthorizeException("Incorrect credentials.");
         resp.setStatus(HttpServletResponse.SC_OK);
         jacksonMapper.writeValue(resp.getWriter(), playerMapper.toDto(entity));
+    }
+
+    public PlayerService getPlayerService() {
+        return playerService;
+    }
+
+    public void setPlayerService(PlayerService playerService) {
+        this.playerService = playerService;
+    }
+
+    public ObjectMapper getJacksonMapper() {
+        return jacksonMapper;
+    }
+
+    public void setJacksonMapper(ObjectMapper jacksonMapper) {
+        this.jacksonMapper = jacksonMapper;
+    }
+
+    public PlayerMapper getPlayerMapper() {
+        return playerMapper;
+    }
+
+    public void setPlayerMapper(PlayerMapper playerMapper) {
+        this.playerMapper = playerMapper;
     }
 }

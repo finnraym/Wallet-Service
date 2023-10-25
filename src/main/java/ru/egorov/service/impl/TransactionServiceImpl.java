@@ -1,5 +1,6 @@
 package ru.egorov.service.impl;
 
+import ru.egorov.aop.annotations.Audit;
 import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.dao.TransactionDAO;
 import ru.egorov.exception.TransactionAlreadyExistsException;
@@ -16,7 +17,6 @@ import java.util.UUID;
  * The type Transaction service.
  */
 
-@Loggable
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionDAO transactionDAO;
@@ -33,11 +33,13 @@ public class TransactionServiceImpl implements TransactionService {
         this.playerService = playerService;
     }
 
+    @Audit
     @Override
     public List<Transaction> getPlayerHistory(Long playerId) {
         return transactionDAO.findAllByPlayerId(playerId);
     }
 
+    @Audit
     @Override
     public boolean debit(BigDecimal amount, UUID transactionIdentifier, Long playerId) {
         checkTransaction(transactionIdentifier);
@@ -58,6 +60,7 @@ public class TransactionServiceImpl implements TransactionService {
         return playerService.updateBalance(playerId, result);
     }
 
+    @Audit
     @Override
     public boolean credit(BigDecimal amount, UUID transactionIdentifier, Long playerId) {
         checkTransaction(transactionIdentifier);

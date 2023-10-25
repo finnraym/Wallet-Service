@@ -119,4 +119,36 @@ public class TransactionServlet extends HttpServlet {
         resp.setStatus(HttpServletResponse.SC_OK);
         jacksonMapper.writeValue(resp.getWriter(), response);
     }
+
+    public PlayerService getPlayerService() {
+        return playerService;
+    }
+
+    public void setPlayerService(PlayerService playerService) {
+        this.playerService = playerService;
+    }
+
+    public TransactionService getTransactionService() {
+        return transactionService;
+    }
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+    public ObjectMapper getJacksonMapper() {
+        return jacksonMapper;
+    }
+
+    public void setJacksonMapper(ObjectMapper jacksonMapper) {
+        this.jacksonMapper = jacksonMapper;
+    }
+
+    public TransactionMapper getTransactionMapper() {
+        return transactionMapper;
+    }
+
+    public void setTransactionMapper(TransactionMapper transactionMapper) {
+        this.transactionMapper = transactionMapper;
+    }
 }

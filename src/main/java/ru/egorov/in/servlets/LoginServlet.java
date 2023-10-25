@@ -17,12 +17,12 @@ import ru.egorov.service.SecurityService;
 
 import java.io.IOException;
 
-@Loggable
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
     private SecurityService securityService;
     private ObjectMapper jacksonMapper;
+
     @Override
     public void init() throws ServletException {
         securityService = (SecurityService) getServletContext().getAttribute("securityService");
@@ -48,5 +48,21 @@ public class LoginServlet extends HttpServlet {
             resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             jacksonMapper.writeValue(resp.getWriter(), new ExceptionResponse(e.getMessage()));
         }
+    }
+
+    public SecurityService getSecurityService() {
+        return securityService;
+    }
+
+    public void setSecurityService(SecurityService securityService) {
+        this.securityService = securityService;
+    }
+
+    public ObjectMapper getJacksonMapper() {
+        return jacksonMapper;
+    }
+
+    public void setJacksonMapper(ObjectMapper jacksonMapper) {
+        this.jacksonMapper = jacksonMapper;
     }
 }
