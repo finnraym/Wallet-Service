@@ -1,5 +1,7 @@
 package ru.egorov.service;
 
+import ru.egorov.aop.annotations.Loggable;
+import ru.egorov.in.dto.JwtResponse;
 import ru.egorov.model.Player;
 
 /**
@@ -22,5 +24,5 @@ public interface SecurityService {
      * @param password the password
      * @return the player
      */
-    Player authorization(String login, String password);
+    JwtResponse authorization(String login, String password);
 }

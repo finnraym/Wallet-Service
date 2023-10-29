@@ -1,5 +1,7 @@
 package ru.egorov.service.impl;
 
+import ru.egorov.aop.annotations.Audit;
+import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.dao.PlayerDAO;
 import ru.egorov.exception.PlayerNotFoundException;
 import ru.egorov.model.Player;
@@ -11,6 +13,8 @@ import java.util.Optional;
 /**
  * The type Player service.
  */
+
+@Loggable
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerDAO playerDAO;
@@ -24,6 +28,7 @@ public class PlayerServiceImpl implements PlayerService {
         this.playerDAO = playerDAO;
     }
 
+    @Audit
     @Override
     public BigDecimal getPlayerBalance(Long id) {
         Optional<Player> optionalPlayer = playerDAO.findById(id);
@@ -34,5 +39,11 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public boolean updateBalance(Long id, BigDecimal balance) {
         return playerDAO.updatePlayerBalance(id, balance);
+    }
+
+    @Override
+    public Player getByLogin(String login) {
+        Optional<Player> optionalPlayer = playerDAO.findByLogin(login);
+        return optionalPlayer.orElseThrow(() -> new PlayerNotFoundException("Player with login " + login + " not found!"));
     }
 }

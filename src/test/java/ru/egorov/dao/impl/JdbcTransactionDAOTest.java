@@ -20,8 +20,8 @@ class JdbcTransactionDAOTest extends JdbcAbstractDAOTest {
     @BeforeEach
     void setUp() {
         DBConnectionProvider connectionProvider = new DBConnectionProvider(
-                container.getJdbcUrl(), container.getUsername(), container.getPassword()
-        );
+                container.getJdbcUrl(), container.getUsername(), container.getPassword(),
+                "org.postgresql.Driver");
 
         DBMigrationService migrationService = new DBMigrationService(connectionProvider, "migration", "db.changelog/changelog.xml");
         migrationService.migration();
