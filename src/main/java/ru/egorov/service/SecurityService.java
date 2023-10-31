@@ -1,6 +1,6 @@
 package ru.egorov.service;
 
-import ru.egorov.aop.annotations.Loggable;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.egorov.in.dto.JwtResponse;
 import ru.egorov.model.Player;
 

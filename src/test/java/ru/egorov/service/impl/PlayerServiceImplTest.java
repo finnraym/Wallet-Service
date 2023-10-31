@@ -6,9 +6,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.egorov.dao.PlayerDAO;
 import ru.egorov.exception.PlayerNotFoundException;
 import ru.egorov.model.Player;
+import ru.egorov.repository.PlayerRepository;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -24,7 +24,7 @@ class PlayerServiceImplTest {
     @InjectMocks
     private PlayerServiceImpl playerService;
     @Mock
-    private PlayerDAO playerDAO;
+    private PlayerRepository playerDAO;
 
     /**
      * Test get player balance success.
@@ -46,16 +46,5 @@ class PlayerServiceImplTest {
         Mockito.when(playerDAO.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(PlayerNotFoundException.class, () -> playerService.getPlayerBalance(1L));
-    }
-
-    /**
-     * Test update balance.
-     */
-    @Test
-    void testUpdateBalance() {
-        Mockito.when(playerDAO.updatePlayerBalance(1L, BigDecimal.valueOf(100))).thenReturn(true);
-
-        boolean result = playerService.updateBalance(1L, BigDecimal.valueOf(100));
-        assertTrue(result);
     }
 }

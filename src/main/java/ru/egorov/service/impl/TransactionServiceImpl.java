@@ -1,11 +1,12 @@
 package ru.egorov.service.impl;
 
-import ru.egorov.aop.annotations.Audit;
-import ru.egorov.aop.annotations.Loggable;
-import ru.egorov.dao.TransactionDAO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.egorov.exception.TransactionAlreadyExistsException;
 import ru.egorov.exception.TransactionOperationException;
 import ru.egorov.model.Transaction;
+import ru.egorov.repository.TransactionRepository;
 import ru.egorov.service.PlayerService;
 import ru.egorov.service.TransactionService;
 
@@ -16,32 +17,22 @@ import java.util.UUID;
 /**
  * The type Transaction service.
  */
-
+@Service
+@RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 
-    private final TransactionDAO transactionDAO;
+    private final TransactionRepository transactionDAO;
     private final PlayerService playerService;
 
-    /**
-     * Instantiates a new Transaction service.
-     *
-     * @param transactionDAO the transaction dao
-     * @param playerService  the player service
-     */
-    public TransactionServiceImpl(TransactionDAO transactionDAO, PlayerService playerService) {
-        this.transactionDAO = transactionDAO;
-        this.playerService = playerService;
-    }
-
-    @Audit
+    @Transactional(readOnly = true)
     @Override
     public List<Transaction> getPlayerHistory(Long playerId) {
         return transactionDAO.findAllByPlayerId(playerId);
     }
 
-    @Audit
+    @Transactional
     @Override
-    public boolean debit(BigDecimal amount, UUID transactionIdentifier, Long playerId) {
+    public void debit(BigDecimal amount, UUID transactionIdentifier, Long playerId) {
         checkTransaction(transactionIdentifier);
         Transaction transaction = openNewTransaction("debit", playerId);
         BigDecimal playerBalance = playerService.getPlayerBalance(playerId);
@@ -57,12 +48,12 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setBalanceAfter(result);
 
         transactionDAO.save(transaction);
-        return playerService.updateBalance(playerId, result);
+        playerService.updateBalance(playerId, result);
     }
 
-    @Audit
+    @Transactional
     @Override
-    public boolean credit(BigDecimal amount, UUID transactionIdentifier, Long playerId) {
+    public void credit(BigDecimal amount, UUID transactionIdentifier, Long playerId) {
         checkTransaction(transactionIdentifier);
         Transaction transaction = openNewTransaction("credit", playerId);
         BigDecimal playerBalance = playerService.getPlayerBalance(playerId);
@@ -74,7 +65,7 @@ public class TransactionServiceImpl implements TransactionService {
         transaction.setBalanceAfter(result);
 
         transactionDAO.save(transaction);
-        return playerService.updateBalance(playerId, result);
+        playerService.updateBalance(playerId, result);
     }
 
     private Transaction openNewTransaction(String type, Long playerId) {

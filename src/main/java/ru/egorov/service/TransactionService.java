@@ -1,6 +1,5 @@
 package ru.egorov.service;
 
-import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.model.Transaction;
 
 import java.math.BigDecimal;
@@ -25,9 +24,8 @@ public interface TransactionService {
      * @param amount                the amount
      * @param transactionIdentifier the transaction identifier
      * @param playerId              the player id
-     * @return the boolean
      */
-    boolean debit(BigDecimal amount, UUID transactionIdentifier, Long playerId);
+    void debit(BigDecimal amount, UUID transactionIdentifier, Long playerId);
 
     /**
      * Credit boolean.
@@ -35,8 +33,7 @@ public interface TransactionService {
      * @param amount                the amount
      * @param transactionIdentifier the transaction identifier
      * @param playerId              the player id
-     * @return the boolean
      */
-    boolean credit(BigDecimal amount, UUID transactionIdentifier, Long playerId);
+    void credit(BigDecimal amount, UUID transactionIdentifier, Long playerId);
 
 }

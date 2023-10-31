@@ -1,5 +1,14 @@
 package ru.egorov.model;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import jakarta.persistence.*;
+import ru.egorov.util.UuidConverter;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -7,20 +16,33 @@ import java.util.UUID;
 /**
  * The type Transaction.
  */
+@Entity
+@Table(name = "transaction", schema = "develop")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Transaction {
-    private Long id;
-    private String type;
-    private Long playerId;
-    private BigDecimal balanceBefore;
-    private BigDecimal balanceAfter;
-    private BigDecimal amount;
-    private UUID transactionIdentifier;
 
-    /**
-     * Instantiates a new Transaction.
-     */
-    public Transaction() {
-    }
+    @Id
+    @SequenceGenerator(name = "transaction_generator", sequenceName = "transaction_id_seq", allocationSize = 1, schema = "develop")
+    @GeneratedValue(generator = "transaction_generator", strategy = GenerationType.SEQUENCE)
+    private Long id;
+
+    @NotNull
+    private String type;
+    @Column(name = "player_id", nullable = false)
+    private Long playerId;
+    @Column(name = "balance_before")
+    private BigDecimal balanceBefore;
+    @Column(name = "balance_after")
+    private BigDecimal balanceAfter;
+
+    private BigDecimal amount;
+
+    @Convert(converter = UuidConverter.class)
+    @Column(name = "transaction_identifier", unique = true, nullable = false)
+    private UUID transactionIdentifier;
 
     /**
      * Instantiates a new Transaction.
@@ -38,132 +60,6 @@ public class Transaction {
         this.balanceBefore = balanceBefore;
         this.balanceAfter = balanceAfter;
         this.amount = amount;
-        this.transactionIdentifier = transactionIdentifier;
-    }
-
-    /**
-     * Gets balance before.
-     *
-     * @return the balance before
-     */
-    public BigDecimal getBalanceBefore() {
-        return balanceBefore;
-    }
-
-    /**
-     * Sets balance before.
-     *
-     * @param balanceBefore the balance before
-     */
-    public void setBalanceBefore(BigDecimal balanceBefore) {
-        this.balanceBefore = balanceBefore;
-    }
-
-    /**
-     * Gets balance after.
-     *
-     * @return the balance after
-     */
-    public BigDecimal getBalanceAfter() {
-        return balanceAfter;
-    }
-
-    /**
-     * Sets balance after.
-     *
-     * @param balanceAfter the balance after
-     */
-    public void setBalanceAfter(BigDecimal balanceAfter) {
-        this.balanceAfter = balanceAfter;
-    }
-
-    /**
-     * Gets amount.
-     *
-     * @return the amount
-     */
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    /**
-     * Sets amount.
-     *
-     * @param amount the amount
-     */
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    /**
-     * Gets id.
-     *
-     * @return the id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Sets id.
-     *
-     * @param id the id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
-     * Gets type.
-     *
-     * @return the type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * Sets type.
-     *
-     * @param type the type
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
-     * Gets player id.
-     *
-     * @return the player id
-     */
-    public Long getPlayerId() {
-        return playerId;
-    }
-
-    /**
-     * Sets player id.
-     *
-     * @param playerId the player id
-     */
-    public void setPlayerId(Long playerId) {
-        this.playerId = playerId;
-    }
-
-    /**
-     * Gets transaction identifier.
-     *
-     * @return the transaction identifier
-     */
-    public UUID getTransactionIdentifier() {
-        return transactionIdentifier;
-    }
-
-    /**
-     * Sets transaction identifier.
-     *
-     * @param transactionIdentifier the transaction identifier
-     */
-    public void setTransactionIdentifier(UUID transactionIdentifier) {
         this.transactionIdentifier = transactionIdentifier;
     }
 

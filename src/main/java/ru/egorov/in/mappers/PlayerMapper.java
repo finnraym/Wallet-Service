@@ -5,12 +5,11 @@ import org.mapstruct.factory.Mappers;
 import ru.egorov.in.dto.PlayerDTO;
 import ru.egorov.model.Player;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface PlayerMapper {
 
     PlayerMapper INSTANCE = Mappers.getMapper(PlayerMapper.class);
 
     PlayerDTO toDto(Player entity);
 
-    Player toEntity(PlayerDTO dto);
 }
