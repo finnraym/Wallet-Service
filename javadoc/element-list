@@ -1,0 +1,12 @@
+ru.egorov.aop
+ru.egorov.config
+ru.egorov.exception
+ru.egorov.in.controller
+ru.egorov.in.dto
+ru.egorov.in.mappers
+ru.egorov.in.security
+ru.egorov.model
+ru.egorov.repository
+ru.egorov.service
+ru.egorov.service.impl
+ru.egorov.util

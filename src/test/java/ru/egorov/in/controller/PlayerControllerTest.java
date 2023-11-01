@@ -47,11 +47,6 @@ class PlayerControllerTest {
     @InjectMocks
     private PlayerController playerController;
 
-    @BeforeEach
-    void setUp() {
-        playerController.setSecurityContext(securityContext);
-    }
-
     @Test
     void testGetBalance_shouldReturnPlayerDTO() throws Exception {
         final String login = "test";
