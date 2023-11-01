@@ -4,8 +4,14 @@
 ## Технологии
 
 - Java 17
-- Jakarta EE
-- Tomcat 10
+- Java EE
+- Spring Framework 5
+- Spring Security
+- Spring Data Jpa
+- Spring AOP
+- Hibernate
+- Swagger UI
+- Tomcat 9
 - База данных PostreSQL
 - Миграция данных при помощи Liquibase
 - JWT
@@ -19,7 +25,7 @@
 ## Инструкция по запуску
 1. Поднять контейнер базы данных ``` docker compose up ``` 
 2. Собрать приложение: ``` mvn clean package ``` 
-3. Запустить через контейнер сервлетов Tomcat не ниже 10 версии
+3. Запустить через контейнер сервлетов Tomcat.
 
 ## Структура базы данных
 
@@ -44,9 +50,9 @@
 | amount                 | numeric(10,2) | Сумма транзакции                                     |
 | transaction_identifier | uuid          | Уникальный идентификатор транзакции для приложения   |
 
-## Servlets
+## API
 
-#### POST `/wallet-service/registration`
+#### POST `/auth/registration`
 
 Регистрация нового игрока. Данные передаются в формате JSON:
 
@@ -73,7 +79,7 @@
 }
 ```
 
-#### POST `/wallet-service/login`
+#### POST `/auth/login`
 
 Авторизация игрока в приложении. Данные передаются в формате JSON:
 
@@ -94,7 +100,7 @@
 }
 ```
 
-#### GET `/wallet-service/players/balance`
+#### GET `/players/balance`
 
 Возвращает текущий баланс игрока. Логин игрока передается в параметрах запроса:
 
@@ -121,7 +127,7 @@
 }
 ```
 
-#### GET `/wallet-service/players/transactions/history`
+#### GET `/players/transactions/history`
 
 Возвращает историю транзакций игрока. Логин игрока передается в параметрах запроса:
 
@@ -156,7 +162,7 @@
 }
 ```
 
-#### POST `/wallet-service/players/transactions/credit`
+#### POST `/players/transactions/credit`
 
 Совершает кредитную транзакцию для текущего авторизованного игрока. Данные передаются в формате JSON:
 
@@ -179,7 +185,7 @@
 }
 ```
 
-#### POST `/wallet-service/players/transactions/debit`
+#### POST `/players/transactions/debit`
 
 Совершает дебетовую транзакцию для текущего авторизованного игрока.
 Все необходимые данные передаются также, как и для кредитной транзакции.
