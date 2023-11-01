@@ -2,6 +2,9 @@ package ru.egorov.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+/**
+ * Web initializer class
+ */
 public class WebInitializer
         extends AbstractAnnotationConfigDispatcherServletInitializer
 {
@@ -19,5 +22,6 @@ public class WebInitializer
     protected String[] getServletMappings() {
         return new String[] {"/"};
     }
+
 
 }

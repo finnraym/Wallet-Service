@@ -3,6 +3,7 @@ package ru.egorov.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.egorov.aop.Audit;
 import ru.egorov.exception.TransactionAlreadyExistsException;
 import ru.egorov.exception.TransactionOperationException;
 import ru.egorov.model.Transaction;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * The type Transaction service.
+ * The transaction service implementation
  */
 @Service
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Transactional
     @Override
+    @Audit
     public void debit(BigDecimal amount, UUID transactionIdentifier, Long playerId) {
         checkTransaction(transactionIdentifier);
         Transaction transaction = openNewTransaction("debit", playerId);
@@ -53,6 +55,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Transactional
     @Override
+    @Audit
     public void credit(BigDecimal amount, UUID transactionIdentifier, Long playerId) {
         checkTransaction(transactionIdentifier);
         Transaction transaction = openNewTransaction("credit", playerId);

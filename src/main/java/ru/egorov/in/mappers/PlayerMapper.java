@@ -1,15 +1,21 @@
 package ru.egorov.in.mappers;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.factory.Mappers;
 import ru.egorov.in.dto.PlayerDTO;
 import ru.egorov.model.Player;
 
+/**
+ * Mapper for player entity
+ */
 @Mapper(componentModel = "spring")
 public interface PlayerMapper {
 
-    PlayerMapper INSTANCE = Mappers.getMapper(PlayerMapper.class);
-
+    /**
+     * Mapping player entity to dto
+     *
+     * @param entity the player entity
+     * @return mapped player dto
+     */
     PlayerDTO toDto(Player entity);
 
 }

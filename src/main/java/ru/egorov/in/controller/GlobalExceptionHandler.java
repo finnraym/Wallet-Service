@@ -1,7 +1,6 @@
 package ru.egorov.in.controller;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -14,8 +13,13 @@ import ru.egorov.exception.*;
 import ru.egorov.in.dto.ExceptionResponse;
 
 import javax.naming.AuthenticationException;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
+/**
+ * The global exception handler
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -81,6 +85,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleIllegalStateException(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ExceptionResponse> handleIllegalStateException(ExpiredJwtException ex) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(new ExceptionResponse("Срок действия вашего токена истек. Пожалуйста авторизуйтесь заново."));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

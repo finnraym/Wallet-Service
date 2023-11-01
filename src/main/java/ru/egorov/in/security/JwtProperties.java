@@ -6,6 +6,9 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import ru.egorov.util.YamlPropertySourceFactory;
 
+/**
+ * POJO for jwt properties
+ */
 @Component
 @Data
 @PropertySource(value = "classpath:application.yml", factory = YamlPropertySourceFactory.class)

@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+
+/**
+ * Player data transfer object
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

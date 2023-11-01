@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,10 +13,14 @@ import org.springframework.stereotype.Service;
 import ru.egorov.in.dto.JwtResponse;
 import ru.egorov.service.PlayerService;
 
+import javax.annotation.PostConstruct;
 import java.nio.file.AccessDeniedException;
 import java.security.Key;
 import java.util.Date;
 
+/**
+ * The service for working with jwt
+ */
 @Service
 @RequiredArgsConstructor
 public class JwtTokenProvider {
@@ -32,6 +35,12 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(properties.getSecret().getBytes());
     }
 
+    /**
+     * Create access token for jwt
+     *
+     * @param login the player login
+     * @return access token string
+     */
     public String createAccessToken(String login) {
         Claims claims = Jwts.claims().setSubject(login);
         Date now = new Date();
@@ -44,6 +53,12 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    /**
+     * Create refresh token for jwt
+     *
+     * @param login the player login
+     * @return refresh token string
+     */
     public String createRefreshToken(String login) {
         Claims claims = Jwts.claims().setSubject(login);
         Date now = new Date();
@@ -67,6 +82,13 @@ public class JwtTokenProvider {
         return new JwtResponse(login, createAccessToken(login), createRefreshToken(login));
     }
 
+    /**
+     * Authentication player by jwt
+     *
+     * @param token the jwt token
+     * @return authentication
+     * @throws AccessDeniedException
+     */
     public Authentication authentication(String token) throws AccessDeniedException {
         String username = getLoginFromToken(token);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -84,12 +106,21 @@ public class JwtTokenProvider {
     }
 
 
-    public boolean validateToken(String token) throws RuntimeException {
-        Jws<Claims> claims = Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token);
-
-        return !claims.getBody().getExpiration().before(new Date());
+    /**
+     * Validate jwt token
+     *
+     * @param token the jwt token
+     * @return true if token is valid and false else
+     */
+    public boolean validateToken(String token) {
+        try {
+            Jws<Claims> claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token);
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch (RuntimeException e) {
+            return false;
+        }
     }
 }

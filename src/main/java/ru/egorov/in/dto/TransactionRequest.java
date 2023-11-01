@@ -1,13 +1,17 @@
 package ru.egorov.in.dto;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotNull;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+/**
+ * The transaction request
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

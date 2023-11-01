@@ -1,9 +1,13 @@
 package ru.egorov.in.controller;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.annotations.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.annotation.Validated;
@@ -16,20 +20,52 @@ import ru.egorov.model.Player;
 import ru.egorov.service.PlayerService;
 import ru.egorov.service.TransactionService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * controller for working with the player and his data
+ */
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/players")
 @Validated
+@Api(value = "PlayerController" , tags = {"Player Controller"})
+@SwaggerDefinition(tags = {
+        @Tag(name = "Player Controller")
+})
 public class PlayerController {
 
     private final PlayerService playerService;
     private final TransactionService transactionService;
     private final PlayerMapper playerMapper;
     private final TransactionMapper transactionMapper;
+    private SecurityContext securityContext;
 
+    @Autowired
+    public PlayerController(PlayerService playerService, TransactionService transactionService, PlayerMapper playerMapper, TransactionMapper transactionMapper) {
+        this.playerService = playerService;
+        this.transactionService = transactionService;
+        this.playerMapper = playerMapper;
+        this.transactionMapper = transactionMapper;
+        this.securityContext = SecurityContextHolder.getContext();
+    }
+
+    public PlayerController(PlayerService playerService, TransactionService transactionService, PlayerMapper playerMapper, TransactionMapper transactionMapper, SecurityContext securityContext) {
+        this.playerService = playerService;
+        this.transactionService = transactionService;
+        this.playerMapper = playerMapper;
+        this.transactionMapper = transactionMapper;
+        this.securityContext = securityContext;
+    }
+
+    /**
+     * Get player's balance.
+     *
+     * @param login the player login
+     * @return response entity
+     */
+    @ApiOperation(value = "Return the player's balance", response = PlayerDTO.class, tags = "getBalance")
     @GetMapping("/balance")
     public ResponseEntity<?> getBalance(@RequestParam String login) {
         if (!isValidLogin(login)) return ResponseEntity.badRequest()
@@ -38,6 +74,13 @@ public class PlayerController {
         return ResponseEntity.ok(playerMapper.toDto(player));
     }
 
+    /**
+     * Get the player's transactions history
+     *
+     * @param login the player login
+     * @return response entity
+     */
+    @ApiOperation(value = "Return the player's transactions history", response = TransactionHistoryResponse.class, tags = "getHistory")
     @GetMapping("/history")
     public ResponseEntity<?> getHistory(@RequestParam String login) {
         if (!isValidLogin(login)) return ResponseEntity.badRequest()
@@ -48,6 +91,13 @@ public class PlayerController {
         return ResponseEntity.ok().body(new TransactionHistoryResponse(login, list));
     }
 
+    /**
+     * Credit transaction process
+     *
+     * @param request the transaction request
+     * @return response entity
+     */
+    @ApiOperation(value = "Credit transactions process", response = SuccessResponse.class, tags = "credit")
     @PostMapping("/transactions/credit")
     public ResponseEntity<?> credit(@RequestBody @Valid TransactionRequest request) {
         if (!isValidLogin(request.getPlayerLogin())) return ResponseEntity.badRequest()
@@ -58,6 +108,13 @@ public class PlayerController {
 
     }
 
+    /**
+     * Debit transaction process
+     *
+     * @param request the transaction request
+     * @return response entity
+     */
+    @ApiOperation(value = "Debit transactions process", response = SuccessResponse.class, tags = "debit")
     @PostMapping("/transactions/debit")
     public ResponseEntity<?> debit(@RequestBody @Valid TransactionRequest request) {
         if (!isValidLogin(request.getPlayerLogin())) return ResponseEntity.badRequest()
@@ -68,7 +125,8 @@ public class PlayerController {
     }
 
     private boolean isValidLogin(String login) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (securityContext.getAuthentication() == null) securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
         if (authentication == null) throw new AuthorizeException("Unauthorized!");
         User principal = (User) authentication.getPrincipal();
         return principal.getUsername().equals(login);

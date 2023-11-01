@@ -20,6 +20,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+/**
+ * Database config class
+ */
 @Configuration
 @EnableJpaRepositories(basePackages = {"ru.egorov.repository"})
 @EnableTransactionManagement

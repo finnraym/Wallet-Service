@@ -69,8 +69,6 @@ class SecurityServiceImplTest {
         Mockito.when(playerDAO.findByLogin(login)).thenReturn(Optional.of(player));
 
         JwtResponse authorization = securityService.authorization(login, password);
-//        assertEquals(login, authorization.getLogin());
-//        assertEquals(password, authorization.getPassword());
     }
 
     /**

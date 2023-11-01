@@ -1,21 +1,17 @@
 package ru.egorov.model;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import jakarta.persistence.*;
 import ru.egorov.util.UuidConverter;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-/**
- * The type Transaction.
- */
 @Entity
 @Table(name = "transaction", schema = "develop")
 @Getter
@@ -44,16 +40,6 @@ public class Transaction {
     @Column(name = "transaction_identifier", unique = true, nullable = false)
     private UUID transactionIdentifier;
 
-    /**
-     * Instantiates a new Transaction.
-     *
-     * @param type                  the type of transaction
-     * @param playerId              the player id
-     * @param balanceBefore         the balance before
-     * @param balanceAfter          the balance after
-     * @param amount                the amount
-     * @param transactionIdentifier the transaction identifier
-     */
     public Transaction(String type, Long playerId, BigDecimal balanceBefore, BigDecimal balanceAfter, BigDecimal amount, UUID transactionIdentifier) {
         this.type = type;
         this.playerId = playerId;

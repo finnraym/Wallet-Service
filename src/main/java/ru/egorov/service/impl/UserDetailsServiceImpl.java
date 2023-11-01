@@ -14,12 +14,22 @@ import ru.egorov.repository.PlayerRepository;
 import java.util.Collections;
 import java.util.Optional;
 
+
+/**
+ * The user details service implementation
+ */
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final PlayerRepository playerDAO;
 
+
+    /**
+     * @param username the username identifying the user whose data is required.
+     * @return user details
+     * @throws UsernameNotFoundException when user with username not found
+     */
     @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

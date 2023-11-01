@@ -5,12 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * The Player entity.
+ * The player entity
  */
 @Entity
 @Table(name = "player", schema = "develop")
@@ -20,23 +21,25 @@ import java.util.Objects;
 @NoArgsConstructor
 public class Player {
 
+    /*
+    * The unique id player entity
+    * */
     @Id
     @SequenceGenerator(name = "player_generator", sequenceName = "player_id_seq", allocationSize = 1, schema = "develop")
     @GeneratedValue(generator = "player_generator", strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    /*
+     * The unique login player entity
+     * */
+    @NotNull
+    @Column(unique = true)
     private String login;
 
+    @NotNull
     private String password;
     private BigDecimal balance;
 
-    /**
-     * Instantiates a new Player.
-     *
-     * @param login    the login
-     * @param password the password
-     * @param balance  the balance
-     */
     public Player(String login, String password, BigDecimal balance) {
         this.login = login;
         this.password = password;

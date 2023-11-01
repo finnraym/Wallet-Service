@@ -3,12 +3,10 @@ package ru.egorov.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.egorov.aop.Audit;
 import ru.egorov.exception.AuthorizeException;
 import ru.egorov.exception.RegisterException;
 import ru.egorov.in.dto.JwtResponse;
@@ -18,12 +16,10 @@ import ru.egorov.repository.PlayerRepository;
 import ru.egorov.service.SecurityService;
 
 import java.math.BigDecimal;
-import java.nio.file.AccessDeniedException;
-import java.util.Collections;
 import java.util.Optional;
 
 /**
- * The type Security service.
+ * The security service implementation
  */
 @Service
 @RequiredArgsConstructor
@@ -36,6 +32,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Transactional
     @Override
+    @Audit
     public Player register(String login, String password) {
         Optional<Player> player = playerDAO.findByLogin(login);
         if (player.isPresent()) {
@@ -52,6 +49,7 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Transactional
     @Override
+    @Audit
     public JwtResponse authorization(String login, String password) {
         Optional<Player> optionalPlayer = playerDAO.findByLogin(login);
         if (optionalPlayer.isEmpty()) {
