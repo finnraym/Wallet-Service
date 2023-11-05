@@ -1,6 +1,6 @@
 package ru.egorov.in.dto;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Request data for security

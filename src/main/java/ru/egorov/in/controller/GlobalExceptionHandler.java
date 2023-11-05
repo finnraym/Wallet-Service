@@ -13,8 +13,8 @@ import ru.egorov.exception.*;
 import ru.egorov.in.dto.ExceptionResponse;
 
 import javax.naming.AuthenticationException;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 
 /**

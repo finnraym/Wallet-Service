@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import ru.egorov.in.dto.JwtResponse;
 import ru.egorov.service.PlayerService;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.nio.file.AccessDeniedException;
 import java.security.Key;
 import java.util.Date;

@@ -1,9 +1,7 @@
 package ru.egorov.in.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,7 +18,7 @@ import ru.egorov.model.Player;
 import ru.egorov.service.PlayerService;
 import ru.egorov.service.TransactionService;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
@@ -30,10 +28,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/players")
 @Validated
-@Api(value = "PlayerController" , tags = {"Player Controller"})
-@SwaggerDefinition(tags = {
-        @Tag(name = "Player Controller")
-})
+@Tag(name = "Player controller", description = "Player API")
 public class PlayerController {
 
     private final PlayerService playerService;
@@ -65,7 +60,7 @@ public class PlayerController {
      * @param login the player login
      * @return response entity
      */
-    @ApiOperation(value = "Return the player's balance", response = PlayerDTO.class, tags = "getBalance")
+    @Operation(summary = "Get player's balance by player login")
     @GetMapping("/balance")
     public ResponseEntity<?> getBalance(@RequestParam String login) {
         if (!isValidLogin(login)) return ResponseEntity.badRequest()
@@ -80,7 +75,7 @@ public class PlayerController {
      * @param login the player login
      * @return response entity
      */
-    @ApiOperation(value = "Return the player's transactions history", response = TransactionHistoryResponse.class, tags = "getHistory")
+    @Operation(summary = "Get player's transaction history by player login")
     @GetMapping("/history")
     public ResponseEntity<?> getHistory(@RequestParam String login) {
         if (!isValidLogin(login)) return ResponseEntity.badRequest()
@@ -97,7 +92,7 @@ public class PlayerController {
      * @param request the transaction request
      * @return response entity
      */
-    @ApiOperation(value = "Credit transactions process", response = SuccessResponse.class, tags = "credit")
+    @Operation(summary = "Credit transaction process")
     @PostMapping("/transactions/credit")
     public ResponseEntity<?> credit(@RequestBody @Valid TransactionRequest request) {
         if (!isValidLogin(request.getPlayerLogin())) return ResponseEntity.badRequest()
@@ -114,7 +109,7 @@ public class PlayerController {
      * @param request the transaction request
      * @return response entity
      */
-    @ApiOperation(value = "Debit transactions process", response = SuccessResponse.class, tags = "debit")
+    @Operation(summary = "Debit transaction process")
     @PostMapping("/transactions/debit")
     public ResponseEntity<?> debit(@RequestBody @Valid TransactionRequest request) {
         if (!isValidLogin(request.getPlayerLogin())) return ResponseEntity.badRequest()
