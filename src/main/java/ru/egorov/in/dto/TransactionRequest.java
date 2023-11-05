@@ -1,38 +1,26 @@
 package ru.egorov.in.dto;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
-
+/**
+ * The transaction request
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class TransactionRequest {
 
+    @NotNull
     private String playerLogin;
+
+    @NotNull
+    @DecimalMin(message = "Amount must not less than 0.0!", value = "0.0", inclusive = false)
     private BigDecimal amount;
-
-    public TransactionRequest() {
-    }
-
-    public TransactionRequest(String playerLogin, BigDecimal amount) {
-        this.playerLogin = playerLogin;
-        this.amount = amount;
-    }
-
-    public String getPlayerLogin() {
-        return playerLogin;
-    }
-
-    public void setPlayerLogin(String playerLogin) {
-        this.playerLogin = playerLogin;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
 }

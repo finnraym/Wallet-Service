@@ -6,17 +6,17 @@
     <changeSet id="003-insert-data" author="egorov">
         <insert tableName="player" schemaName="develop">
             <column name="login" value="testplayer1"/>
-            <column name="password" value="testplayer1"/>
+            <column name="password" value="$2a$10$mMT8GJQC1cY5c7o8NbfAvO4OdSyE2x0BK4tfBiS29SKVtQAEnNpwW"/>
             <column name="balance" value="125.0"/>
         </insert>
         <insert tableName="player" schemaName="develop">
             <column name="login" value="general"/>
-            <column name="password" value="general"/>
+            <column name="password" value="$2a$10$wbQ2iY7TgULbhHsyEZq2H.y04jR9rxzq6yd.tgv3tyDxXB/IViru6"/>
             <column name="balance" value="1000.0"/>
         </insert>
         <insert tableName="player" schemaName="develop">
             <column name="login" value="garold"/>
-            <column name="password" value="pain"/>
+            <column name="password" value="$2a$10$vzxO2UMZiwctuTYGITmtk.z2ley3BejnlEbXTg5Mvr4MQ6mQhv0vm"/>
             <column name="balance" value="0.0"/>
         </insert>
 

@@ -1,49 +1,48 @@
 package ru.egorov.service.impl;
 
-import ru.egorov.aop.annotations.Audit;
-import ru.egorov.aop.annotations.Loggable;
-import ru.egorov.dao.PlayerDAO;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.egorov.aop.Audit;
 import ru.egorov.exception.PlayerNotFoundException;
 import ru.egorov.model.Player;
+import ru.egorov.repository.PlayerRepository;
 import ru.egorov.service.PlayerService;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+
 
 /**
- * The type Player service.
+ * The player service implementation
  */
-
-@Loggable
+@Service
+@RequiredArgsConstructor
 public class PlayerServiceImpl implements PlayerService {
 
-    private final PlayerDAO playerDAO;
+    private final PlayerRepository playerRepository;
 
-    /**
-     * Instantiates a new Player service.
-     *
-     * @param playerDAO the player dao
-     */
-    public PlayerServiceImpl(PlayerDAO playerDAO) {
-        this.playerDAO = playerDAO;
-    }
-
+    @Transactional(readOnly = true)
     @Audit
     @Override
     public BigDecimal getPlayerBalance(Long id) {
-        Optional<Player> optionalPlayer = playerDAO.findById(id);
-        Player playerInMemory = optionalPlayer.orElseThrow(() -> new PlayerNotFoundException("The player with id " + id + " not found."));
-        return playerInMemory.getBalance();
+        return playerRepository.findById(id)
+                .orElseThrow(() -> new PlayerNotFoundException("The player with id " + id + " not found."))
+                .getBalance();
     }
 
+    @Transactional
     @Override
-    public boolean updateBalance(Long id, BigDecimal balance) {
-        return playerDAO.updatePlayerBalance(id, balance);
+    public void updateBalance(Long id, BigDecimal balance) {
+        Player byId = playerRepository.findById(id)
+                .orElseThrow(() -> new PlayerNotFoundException("The player with id " + id + " not found."));
+        byId.setBalance(balance);
+        playerRepository.save(byId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Player getByLogin(String login) {
-        Optional<Player> optionalPlayer = playerDAO.findByLogin(login);
-        return optionalPlayer.orElseThrow(() -> new PlayerNotFoundException("Player with login " + login + " not found!"));
+        return playerRepository.findByLogin(login)
+                .orElseThrow(() -> new PlayerNotFoundException("Player with login " + login + " not found!"));
     }
 }

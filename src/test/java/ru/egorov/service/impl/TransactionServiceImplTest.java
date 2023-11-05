@@ -7,10 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.egorov.dao.TransactionDAO;
 import ru.egorov.exception.TransactionAlreadyExistsException;
 import ru.egorov.exception.TransactionOperationException;
 import ru.egorov.model.Transaction;
+import ru.egorov.repository.TransactionRepository;
 import ru.egorov.service.PlayerService;
 
 import java.math.BigDecimal;
@@ -30,7 +30,7 @@ class TransactionServiceImplTest {
     @InjectMocks
     private TransactionServiceImpl transactionService;
     @Mock
-    private TransactionDAO transactionDAO;
+    private TransactionRepository transactionDAO;
     @Mock
     private PlayerService playerService;
 

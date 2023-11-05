@@ -1,6 +1,5 @@
 package ru.egorov.service;
 
-import ru.egorov.aop.annotations.Loggable;
 import ru.egorov.model.Player;
 
 import java.math.BigDecimal;
@@ -11,7 +10,7 @@ import java.math.BigDecimal;
 public interface PlayerService {
 
     /**
-     * Gets player balance.
+     * Get player's balance.
      *
      * @param id the id
      * @return the player balance
@@ -23,10 +22,15 @@ public interface PlayerService {
      *
      * @param id      the id
      * @param balance the balance
-     * @return the boolean
      */
-    boolean updateBalance(Long id, BigDecimal balance);
+    void updateBalance(Long id, BigDecimal balance);
 
+    /**
+     * Get player by login.
+     *
+     * @param login the login
+     * @return the player entity
+     */
     Player getByLogin(String login);
 
 }

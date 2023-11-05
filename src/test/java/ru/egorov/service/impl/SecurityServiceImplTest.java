@@ -6,11 +6,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.egorov.dao.PlayerDAO;
 import ru.egorov.exception.AuthorizeException;
 import ru.egorov.exception.RegisterException;
 import ru.egorov.in.dto.JwtResponse;
 import ru.egorov.model.Player;
+import ru.egorov.repository.PlayerRepository;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -27,7 +27,7 @@ class SecurityServiceImplTest {
     @InjectMocks
     private SecurityServiceImpl securityService;
     @Mock
-    private PlayerDAO playerDAO;
+    private PlayerRepository playerDAO;
 
     /**
      * Test register success.
@@ -69,8 +69,6 @@ class SecurityServiceImplTest {
         Mockito.when(playerDAO.findByLogin(login)).thenReturn(Optional.of(player));
 
         JwtResponse authorization = securityService.authorization(login, password);
-//        assertEquals(login, authorization.getLogin());
-//        assertEquals(password, authorization.getPassword());
     }
 
     /**
