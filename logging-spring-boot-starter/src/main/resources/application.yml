@@ -1,0 +1,7 @@
+logging:
+  level:
+    root: INFO
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  file:
+    name: 'app.log'
