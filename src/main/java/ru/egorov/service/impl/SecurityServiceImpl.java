@@ -6,7 +6,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.egorov.aop.Audit;
 import ru.egorov.exception.AuthorizeException;
 import ru.egorov.exception.RegisterException;
 import ru.egorov.in.dto.JwtResponse;
@@ -32,7 +31,6 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Transactional
     @Override
-    @Audit
     public Player register(String login, String password) {
         Optional<Player> player = playerDAO.findByLogin(login);
         if (player.isPresent()) {
@@ -49,7 +47,6 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Transactional
     @Override
-    @Audit
     public JwtResponse authorization(String login, String password) {
         Optional<Player> optionalPlayer = playerDAO.findByLogin(login);
         if (optionalPlayer.isEmpty()) {

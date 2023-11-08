@@ -1,18 +1,25 @@
-datasource:
-  url: jdbc:postgresql://localhost:5435/wallet_service
-  username: postgres_user
-  password: postgres_pass
-  driver-class-name: org.postgresql.Driver
+server:
+  port: 8082
 
-liquibase:
-  change-log: classpath:db.changelog/changelog.xml
-  liquibase-schema: migration
-jpa:
-  hibernate:
-    ddl-auto: validate
-    dialect: org.hibernate.dialect.PostgreSQL95Dialect
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5435/wallet_service
+    username: postgres_user
+    password: postgres_pass
+    driver-class-name: org.postgresql.Driver
 
-jwt:
-  secret: c3VwZXJwdXBlcmR1cGVybWVnYWhhcmRvdmVydG9waGlnaHNlY3JldA==
-  access: 3600000
-  refresh: 2592000000
+  liquibase:
+    enabled: true
+    change-log: classpath:db.changelog/changelog.xml
+    liquibase-schema: migration
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+security:
+  jwt:
+    secret: c3VwZXJwdXBlcmR1cGVybWVnYWhhcmRvdmVydG9waGlnaHNlY3JldA==
+    access: 3600000
+    refresh: 2592000000

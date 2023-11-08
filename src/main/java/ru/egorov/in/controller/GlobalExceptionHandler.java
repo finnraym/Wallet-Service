@@ -1,6 +1,8 @@
 package ru.egorov.in.controller;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,8 +15,6 @@ import ru.egorov.exception.*;
 import ru.egorov.in.dto.ExceptionResponse;
 
 import javax.naming.AuthenticationException;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 /**

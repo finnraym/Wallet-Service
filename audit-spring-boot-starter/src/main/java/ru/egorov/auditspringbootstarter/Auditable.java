@@ -1,4 +1,4 @@
-package ru.egorov.aop;
+package ru.egorov.auditspringbootstarter;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation for audit aop logic
+ * Annotation for adding audit logic using aspects.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Audit {
+public @interface Auditable {
 }

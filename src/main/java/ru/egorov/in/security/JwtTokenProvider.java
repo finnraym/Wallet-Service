@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import ru.egorov.in.dto.JwtResponse;
 import ru.egorov.service.PlayerService;
 
-import javax.annotation.PostConstruct;
 import java.nio.file.AccessDeniedException;
 import java.security.Key;
 import java.util.Date;
