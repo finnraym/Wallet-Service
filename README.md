@@ -4,14 +4,13 @@
 ## Технологии
 
 - Java 17
-- Java EE
-- Spring Framework 5
+- Spring Boot 3
+- Spring Framework 6
 - Spring Security
 - Spring Data Jpa
 - Spring AOP
 - Hibernate
 - Swagger UI
-- Tomcat 9
 - База данных PostreSQL
 - Миграция данных при помощи Liquibase
 - JWT
@@ -25,7 +24,7 @@
 ## Инструкция по запуску
 1. Поднять контейнер базы данных ``` docker compose up ``` 
 2. Собрать приложение: ``` mvn clean package ``` 
-3. Запустить через контейнер сервлетов Tomcat.
+3. Запустить приложение через WalletServiceApplication
 
 ## Структура базы данных
 
