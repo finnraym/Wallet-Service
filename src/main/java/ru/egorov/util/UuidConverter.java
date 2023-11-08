@@ -2,6 +2,7 @@ package ru.egorov.util;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+
 import java.util.Objects;
 import java.util.UUID;
 

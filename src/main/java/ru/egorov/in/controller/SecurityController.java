@@ -1,7 +1,7 @@
 package ru.egorov.in.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -10,13 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.egorov.in.dto.JwtResponse;
-import ru.egorov.in.dto.PlayerDTO;
 import ru.egorov.in.dto.SecurityRequest;
 import ru.egorov.in.mappers.PlayerMapper;
 import ru.egorov.model.Player;
 import ru.egorov.service.SecurityService;
-
-import jakarta.validation.Valid;
 
 /**
  * The security controller

@@ -6,7 +6,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.egorov.auditspringbootstarter.Auditable;
 import ru.egorov.exception.AuthorizeException;
 import ru.egorov.exception.RegisterException;
 import ru.egorov.in.dto.JwtResponse;
@@ -30,7 +29,6 @@ public class SecurityServiceImpl implements SecurityService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 
-    @Auditable
     @Transactional
     @Override
     public Player register(String login, String password) {
@@ -47,7 +45,6 @@ public class SecurityServiceImpl implements SecurityService {
         return playerDAO.save(newPlayer);
     }
 
-    @Auditable
     @Transactional
     @Override
     public JwtResponse authorization(String login, String password) {

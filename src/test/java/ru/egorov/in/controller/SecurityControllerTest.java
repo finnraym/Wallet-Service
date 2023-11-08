@@ -1,12 +1,13 @@
 package ru.egorov.in.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 import ru.egorov.in.dto.JwtResponse;
 import ru.egorov.in.dto.PlayerDTO;
 import ru.egorov.in.dto.SecurityRequest;
@@ -16,36 +17,44 @@ import ru.egorov.service.SecurityService;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith({MockitoExtension.class})
+@AutoConfigureMockMvc(addFilters = false)
+@WebMvcTest(SecurityController.class)
 class SecurityControllerTest {
 
-    @Mock
+    @MockBean
     private SecurityService securityService;
-    @Mock
+    @MockBean
     private PlayerMapper playerMapper;
-    @InjectMocks
-    private SecurityController securityController;
+
+    @Autowired
+    private MockMvc mvc;
+
     @Test
-    void testLogin_shouldReturnJwtResponse() {
+    void testLogin_shouldReturnJwtResponse() throws Exception {
         final String login = "test";
         final String password = "test";
         final SecurityRequest request = new SecurityRequest(login, password);
         JwtResponse jwt = new JwtResponse(login, "accessToken", "refreshToken");
-        when(securityService.authorization(request.login(), request.password())).thenReturn(jwt);
-        ResponseEntity<?> response = securityController.login(request);
-
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
-        JwtResponse body = (JwtResponse) response.getBody();
-
-        assertNotNull(body);
-        assertEquals(jwt, body);
+        when(securityService.authorization(login, password)).thenReturn(jwt);
+        mvc.perform(post("/auth/login")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(jwt)));
     }
 
     @Test
-    void testRegistration_shouldReturnPlayerDTO() {
+    void testRegistration_shouldReturnPlayerDTO() throws Exception {
         final String login = "test";
         final String password = "test";
         final SecurityRequest request = new SecurityRequest(login, password);
@@ -53,15 +62,14 @@ class SecurityControllerTest {
         PlayerDTO playerDTO = new PlayerDTO(login, BigDecimal.ZERO);
         when(securityService.register(login, password)).thenReturn(player);
         when(playerMapper.toDto(player)).thenReturn(playerDTO);
-
-        ResponseEntity<?> response = securityController.registration(request);
-
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
-        PlayerDTO body = (PlayerDTO) response.getBody();
-
-        assertNotNull(body);
-        assertEquals(playerDTO.getLogin(), body.getLogin());
-        assertEquals(playerDTO.getBalance().doubleValue(), body.getBalance().doubleValue());
+        mvc.perform(post("/auth/registration")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(request))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json(new ObjectMapper().writeValueAsString(playerDTO)));
 
     }
 }
